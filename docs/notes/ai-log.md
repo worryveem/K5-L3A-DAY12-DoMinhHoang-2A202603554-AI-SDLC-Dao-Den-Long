@@ -56,3 +56,9 @@
 - Người dùng muốn chỉ cần commit/push rồi nộp. Thêm job release sau test/build ba hệ điều hành; kiểm ZIP/bằng chứng trước khi tạo tag và Release, giữ tag cũ.
 - Chưa chạy job GitHub hoặc publish tại máy. Hướng dẫn chính xác ở mục 9 SUBMISSION; không cần thêm file báo cáo cá nhân.
 - Điểm xuất phát Đêm 3 là giả định được PRD cho phép, không tự đặt thêm yêu cầu xin phê duyệt. Replay giữ đúng lựa chọn của người dùng và ghi rõ tự động.
+
+### Sửa CI sau lần push đầu
+
+- Run44761663144: Linux/Windows đạt; macOS không có bước nào được chạy, runner_name rỗng. Annotation GitHub báo không cấp được hosted runner và thiếu capacity macOS ARM64; release bị skip do dependency.
+- Đổi riêng runner macOS từ `macos-latest` sang `macos-15-intel` theo nhãn chính thức; giữ đủ ba hệ điều hành và chặn release nếu test lỗi. Đặt matrix fail-fast=false để một job lỗi không hủy bằng chứng các job còn lại.
+- Kiểm tra YAML tại máy; chưa nhận bản sửa là đã chạy đạt trên macOS/GitHub. Không commit/push thay người dùng.
