@@ -19,3 +19,10 @@
 - Every new Phase 2 feature needs a headless scenario; do not substitute FPS claims with simulation throughput.
 - Do not fabricate screenshots, videos, token usage, external reviews or release status.
 - No credentials, `.env` files, dependency folders or private user data in Git.
+- Phase4: bench must render the real shared View, never infer FPS from headless throughput.
+- Keep raw frame timings and compute exact avg/slowest1%/p95; no adjusted or invented measurements.
+- Soak all nights in one process and report real RSS at stated reset boundaries; never inflate baseline.
+- Leaderboard test data uses an isolated temporary directory; never overwrite a user's saved scores.
+- Only publish a release after building the runnable archive and verifying checks/evidence; preserve earlier tags.
+- Current user instruction: Phase4 work stays local. Do not commit, tag, push, or publish a release without a later explicit instruction superseding this restriction.
+- Latest clarification: prepare everything so the user can commit/push and submit. The main-push release workflow is prepared for that future user action; do not execute publication or Git mutations locally on the user's behalf.

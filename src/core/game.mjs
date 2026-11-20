@@ -593,7 +593,7 @@ export class Game {
     next[1] = s.pos[1] + (newGround - (oldGround ?? newGround));
     s.pos = next;
   }
-  moveShades() {
+  moveShades({wanderOnly=false}={}) {
     const p = this.player,
       speed = this.night === 3 ? 4.5 : this.t.shade_speed;
     for (const s of this.shades) {
@@ -668,7 +668,7 @@ export class Game {
       const d = distance(p.pos, s.pos);
       if (s.state === "chase" && (d > 18 || p.respawnLeft > 0))
         s.state = "wander";
-      if (s.state === "wander" && d <= 12 && p.respawnLeft === 0)
+      if (!wanderOnly && s.state === "wander" && d <= 12 && p.respawnLeft === 0)
         s.state = "chase";
       if (s.state === "chase") {
         s.targetLanternId = null;

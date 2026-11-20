@@ -131,26 +131,26 @@ git push origin phase-2
 ## 7. Checklist trước khi nộp
 
 Sản phẩm
-- [ ] Repo ở chế độ Public, tên đúng quy ước.
-- [ ] Clone sạch sang thư mục khác, làm theo README (tối đa 3 lệnh), game chạy được.
-- [ ] Chế độ headless chạy đúng theo Test Contract.
-- [ ] Tag `phase-1` đến `phase-4` có đủ, trỏ đúng commit.
-- [ ] Release `v1.0.0` có bản chạy được.
+- [x] Repo ở chế độ Public, tên đúng quy ước.
+- [ ] Clone sạch sang thư mục khác, làm theo README (tối đa 3 lệnh), game chạy được. **Snapshot local Phase4 đã qua cài/build/test/HTTP trong thư mục sạch; chưa có commit Phase4 trên remote để clone.**
+- [x] Chế độ headless đã qua kiểm chứng contract và hồi quy của repo (chưa chạy test ẩn).
+- [ ] Tag `phase-1` đến `phase-4` có đủ, trỏ đúng commit. **Hiện có1–3; chưa tạo4 theo yêu cầu không commit/push.**
+- [ ] Release `v1.0.0` có bản chạy được. **Chỉ chuẩn bị gói local, chưa publish.**
 
 Bằng chứng và ghi chép
-- [ ] Mỗi phase có bằng chứng cho các yêu cầu chính; chỗ chưa đạt đã ghi trung thực.
-- [ ] Bằng chứng khớp mã ở tag tương ứng, không sửa tay.
-- [ ] Test cũ bị yêu cầu mới làm sai đã được sửa hoặc bỏ kèm lý do.
-- [ ] Có giả định cho chỗ mơ hồ, nhật ký dùng AI (gồm token/chi phí ước tính), retro.
+- [x] Mỗi phase có bằng chứng cho các yêu cầu chính; chỗ chưa đạt đã ghi trung thực.
+- [ ] Bằng chứng khớp mã ở tag tương ứng, không sửa tay. **Phase1–3 giữ nguyên; Phase4 có log/hash local nhưng chưa có tag.**
+- [x] Test cũ bị yêu cầu mới làm sai đã được sửa hoặc bỏ kèm lý do.
+- [x] Có giả định cho chỗ mơ hồ, nhật ký dùng AI (gồm token/chi phí ước tính), retro.
 
 Harness AI
-- [ ] File harness (AGENTS.md hoặc tương đương, skills, hooks, plugins...) còn trong repo và trong lịch sử git.
-- [ ] Nếu dùng công cụ không có file cấu hình, các lời nhắc chính được ghi trong nhật ký dùng AI.
+- [x] File harness (AGENTS.md hoặc tương đương, skills, hooks, plugins...) còn trong repo và trong lịch sử git.
+- [x] Nếu dùng công cụ không có file cấu hình, các lời nhắc chính được ghi trong nhật ký dùng AI.
 
 Video, giấy phép, bảo mật
-- [ ] Video `.mp4` dưới 5 phút, link ở đầu README, mở được khi chưa đăng nhập.
-- [ ] `CREDITS` ghi nguồn mọi asset, âm thanh, công cụ AI tạo nội dung; có `LICENSE`.
-- [ ] Không có `.env`, API key, token trong repo và trong lịch sử commit.
+- [ ] Video `.mp4` dưới 5 phút, link ở đầu README, mở được khi chưa đăng nhập. **Đã có MP4 local64,73s và link README; chưa đưa lên public theo yêu cầu không push/publish.**
+- [x] `CREDITS` ghi nguồn mọi asset, âm thanh, công cụ AI tạo nội dung; có `LICENSE`.
+- [x] Đã rà tên file lịch sử và mẫu key phổ biến, không phát hiện `.env` hoặc key/token; xem `docs/proof/phase-4/repository-audit.json` (không phải bộ dò bí mật toàn diện).
 
 ## 8. Mẹo kiểm tra nhanh
 
@@ -161,3 +161,31 @@ git log --oneline | head -20
 ```
 
 Mở trang repo bằng cửa sổ ẩn danh để chắc repo, Release và video xem được khi chưa đăng nhập.
+
+## 9. Bàn giao bản này
+
+Bản local đã có thông tin Đỗ Minh Hoàng / 2A202603554 / K5-L3A, báo cáo bắt buộc,
+video và bằng chứng. Không cần fork hoặc tạo repo khác. Chỉ thực hiện:
+
+```sh
+git add .
+git commit -m "release: complete Phase 4 and v1.0.0 submission"
+git push origin main
+```
+
+Workflow **Verify game** tự chạy test/build trên Linux, macOS và Windows.
+Khi cả ba đạt, job `release` kiểm bằng chứng, giải nén/chạy thử gói rồi tạo
+`phase-4`, `v1.0.0` và GitHub Release đính kèm ZIP, MP4, bench và soak.
+Không sửa tag Phase 1–3, không ghi đè Release đã phát hành.
+Workflow dùng `GITHUB_TOKEN` tự cấp, không cần điền token vào repo.
+Quyền phát hành được khai báo riêng ở job release theo [tài liệu GitHub Actions](https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax#permissions).
+
+Sau push, đợi job `release` màu xanh ở tab **Actions** và mở **Releases → v1.0.0**.
+Nếu Actions bị tắt hoặc quy tắc repo chặn quyền tạo tag/Release, job sẽ báo lỗi;
+không coi push thành công là đã phát hành. Xem log để xử lý đúng lỗi đó.
+
+Khi Release hiển thị đủ ZIP/video, nộp link repo:
+https://github.com/worryveem/K5-L3A-DAY12-DoMinhHoang-2A202603554-AI-SDLC-Dao-Den-Long
+
+Các ô chưa đánh dấu ở mục 7 phản ánh phần GitHub chưa thực hiện tại lúc chuẩn bị local;
+kết quả workflow và Release là bằng chứng bàn giao sau push. Không đánh dấu trước là đã phát hành.

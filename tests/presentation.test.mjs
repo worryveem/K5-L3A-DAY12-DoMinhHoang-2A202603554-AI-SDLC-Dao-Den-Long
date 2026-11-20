@@ -5,6 +5,7 @@ import {
   paletteFor,
   lanternAppearance,
 } from "../public/presentation.mjs";
+import { defaults } from "../public/bindings.mjs";
 test("accessible palette uses exact cyan rim, white danger and non-color warning marker", () => {
   assert.deepEqual(paletteFor(true), {
     shadeRim: 0x00b3ff,
@@ -33,6 +34,9 @@ test("saved accessibility roundtrip and legacy settings keep valid defaults", ()
     volume: 0.35,
     sensitivity: 1,
     accessiblePalette: false,
+    reducedMotion: false,
+    largeText: false,
+    bindings: { ...defaults },
   });
   assert.equal(
     normalizeSettings({

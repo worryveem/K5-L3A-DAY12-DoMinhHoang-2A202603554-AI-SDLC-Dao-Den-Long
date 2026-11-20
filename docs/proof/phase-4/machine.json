@@ -1,0 +1,12 @@
+{
+  "recorded_at": "2026-11-20T14:21:47.425Z",
+  "cpu": "12th Gen Intel(R) Core(TM) i5-12500H",
+  "ram_gb": 15.710990905761719,
+  "os": "win32 10.0.26320",
+  "available_gpus": [
+    "Intel(R) Iris(R) Xe Graphics",
+    "NVIDIA GeForce RTX 3060 Laptop GPU"
+  ],
+  "power_plan": "Balanced (read with powercfg /GETACTIVESCHEME)",
+  "gpu_selection": "Electron force_high_performance_gpu; available GPUs are inventory, not a claim about selected adapter"
+}

@@ -1,0 +1,71 @@
+{
+  "mode": "mock CLI only; no network or Git mutations",
+  "happy_path": "passed",
+  "reject_non_main_before_mutation": "passed",
+  "shell_syntax": "passed",
+  "yaml_parse": "passed",
+  "calls": [
+    [
+      "api",
+      "repos/test/game/git/ref/heads/main",
+      "--jq",
+      ".object.sha"
+    ],
+    [
+      "api",
+      "--method",
+      "POST",
+      "repos/test/game/git/refs",
+      "-f",
+      "ref=refs/tags/phase-4",
+      "-f",
+      "sha=636a187f9a1b8d74c40f625e80602d7fce5a6d0e"
+    ],
+    [
+      "api",
+      "--method",
+      "POST",
+      "repos/test/game/git/refs",
+      "-f",
+      "ref=refs/tags/v1.0.0",
+      "-f",
+      "sha=636a187f9a1b8d74c40f625e80602d7fce5a6d0e"
+    ],
+    [
+      "release",
+      "view",
+      "v1.0.0",
+      "--json",
+      "isDraft",
+      "--jq",
+      ".isDraft"
+    ],
+    [
+      "release",
+      "create",
+      "v1.0.0",
+      "--verify-tag",
+      "--draft",
+      "--title",
+      "\u0110\u1ea3o \u0110\u00e8n L\u1ed3ng v1.0.0",
+      "--notes-file",
+      "docs/notes/release-v1.0.0.md"
+    ],
+    [
+      "release",
+      "upload",
+      "v1.0.0",
+      "artifacts/dao-den-long-v1.0.0-web.zip",
+      "docs/demo/demo.mp4",
+      "bench.json",
+      "soak.json",
+      "--clobber"
+    ],
+    [
+      "release",
+      "edit",
+      "v1.0.0",
+      "--draft=false"
+    ]
+  ]
+}

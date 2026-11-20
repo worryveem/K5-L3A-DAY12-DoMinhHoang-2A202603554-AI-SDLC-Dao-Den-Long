@@ -1,0 +1,84 @@
+{
+  "seed": 7,
+  "process_id": 6396,
+  "details": [
+    {
+      "night": 1,
+      "seed": 7,
+      "ticks": 1172,
+      "result": "lost",
+      "pid": 6396
+    },
+    {
+      "night": 2,
+      "seed": 8,
+      "ticks": 1374,
+      "result": "lost",
+      "pid": 6396
+    },
+    {
+      "night": 3,
+      "seed": 9,
+      "ticks": 336,
+      "result": "lost",
+      "pid": 6396
+    },
+    {
+      "night": 1,
+      "seed": 10,
+      "ticks": 2925,
+      "result": "lost",
+      "pid": 6396
+    },
+    {
+      "night": 2,
+      "seed": 11,
+      "ticks": 4033,
+      "result": "lost",
+      "pid": 6396
+    },
+    {
+      "night": 3,
+      "seed": 12,
+      "ticks": 336,
+      "result": "lost",
+      "pid": 6396
+    },
+    {
+      "night": 1,
+      "seed": 13,
+      "ticks": 1791,
+      "result": "lost",
+      "pid": 6396
+    },
+    {
+      "night": 2,
+      "seed": 14,
+      "ticks": 2887,
+      "result": "lost",
+      "pid": 6396
+    },
+    {
+      "night": 3,
+      "seed": 15,
+      "ticks": 324,
+      "result": "lost",
+      "pid": 6396
+    },
+    {
+      "night": 1,
+      "seed": 16,
+      "ticks": 3111,
+      "result": "lost",
+      "pid": 6396
+    }
+  ],
+  "gc_at_boundaries": true,
+  "input_policy": {
+    "direction_every_ticks": 30,
+    "jump": 0.05,
+    "dash": 0.03,
+    "pulse": 0.02,
+    "interact": 0.1
+  }
+}

@@ -48,8 +48,8 @@ Phase 3 và 4 chưa phát hành. Đây là kế hoạch trước triển khai Ph
 - Nhạc/hiệu ứng tạo bằng WebAudio; trang trí và âm thanh không dùng RNG gameplay.
 - Ticket không chỉ rõ xuất phát Đêm 3, còn origin v1.0 nằm dưới đĩa tầng 2/tháp.
   Headless giữ mặc định (0,0,0) của contract và cho phép scenario đổi vị trí;
-  bản chơi chọn điểm đáp (0,6,6) cho Đêm 3, hồi sinh tại đó. Đây là giả định cần
-  Coach xác nhận, không phải yêu cầu gốc. Đêm 1/2 dùng (0,0,0).
+  bản chơi chọn điểm đáp (0,6,6) cho Đêm 3, hồi sinh tại đó. Đây là giả định
+  được ghi lại theo quyền tự giả định hợp lý của PRD-0, không phải tọa độ do đề đặt. Đêm 1/2 dùng (0,0,0).
 
 ## Hồi quy
 

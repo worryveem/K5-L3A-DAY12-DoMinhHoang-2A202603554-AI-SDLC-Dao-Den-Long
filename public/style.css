@@ -6,7 +6,7 @@
     sans-serif;
   color: #f5f1e6;
   background: #0e1430;
-  font-size: 16px;
+  font-size: 18px;
   color-scheme: dark;
   --gold: #f2c14e;
   --muted: #b9b9c5;
@@ -345,6 +345,142 @@ footer {
   left: 50%;
   transform: translateX(-50%);
   z-index: 20;
+}
+.large-text {
+  font-size: 22.5px;
+}
+.eyebrow,
+.legend,
+.legend small,
+.menu-foot,
+.progress span,
+.keys,
+#carried,
+.abilities span,
+#objective,
+#direction span {
+  font-size: 1rem;
+}
+#leaderboard-open {
+  margin-top: 0.6rem;
+}
+#menu {
+  justify-content: flex-start;
+  padding-top: 5vh;
+}
+#menu .legend {
+  position: absolute;
+  left: 7vw;
+  bottom: 4.5rem;
+  margin: 0;
+}
+#settings .panel {
+  width: min(52rem, 96vw);
+  max-height: 94vh;
+  overflow: auto;
+  padding: 1.3rem 2rem;
+}
+#result .panel {
+  max-height: 94vh;
+  overflow: auto;
+}
+#settings h2 {
+  margin: 0.2rem 0 0.6rem;
+}
+#settings label {
+  margin: 0.6rem 0;
+}
+#key-bindings {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.4rem 1.4rem;
+}
+#key-bindings label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  margin: 0;
+}
+#key-bindings button {
+  margin: 0;
+  width: auto;
+  min-width: 7rem;
+  padding: 0.35rem 0.6rem;
+}
+#binding-message,
+#score-message {
+  margin: 0.4rem 0;
+  color: #ffe9b0;
+  min-height: 1.2em;
+}
+.board-panel {
+  width: min(48rem, 96vw);
+  max-height: 90vh;
+  overflow: auto;
+}
+.table-scroll {
+  overflow: auto;
+}
+table {
+  border-collapse: collapse;
+  width: 100%;
+  text-align: left;
+}
+th,
+td {
+  padding: 0.65rem 0.5rem;
+  border-bottom: 1px solid #f5f1e62a;
+}
+th {
+  color: #f2c14e;
+}
+#visual-cues {
+  position: absolute;
+  top: 28%;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: 70%;
+  text-align: center;
+  color: var(--danger, #ff5a5f);
+  background: #0e1430a0;
+  padding: 0.3rem 0.6rem;
+}
+#visual-cues:empty {
+  display: none;
+}
+#spawn-arrow {
+  position: absolute;
+  color: var(--danger, #ff5a5f);
+  font-size: 2rem;
+  text-shadow: 0 0 6px #000;
+}
+.large-text .keys {
+  display: none;
+}
+.reduced-motion .danger {
+  animation: none;
+}
+.reduced-motion * {
+  scroll-behavior: auto !important;
+  transition: none !important;
+}
+#demo-caption {
+  position: absolute;
+  bottom: 0.3rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 18px;
+  background: #0e1430dd;
+  padding: 0.15rem 0.6rem;
+  color: #f5f1e6;
+  z-index: 8;
+  white-space: nowrap;
+}
+#demo-report-text {
+  white-space: pre-wrap;
+  font: 1.2rem/1.8 system-ui;
+  text-align: left;
 }
 @keyframes blink {
   50% {

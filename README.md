@@ -1,13 +1,18 @@
 # Đảo Đèn Lồng
 
-**Video demo:** chưa quay. **Bản hiện tại:** Phase 3 / Test Contract v1.2.
+**[Video demo MP4 — replay tự động và bằng chứng](docs/demo/demo.mp4)** · **v1.0.0 / Contract v1.3**
 
 Game web 3D góc nhìn thứ ba: Mây thu đom đóm, thắp và châm dầu cho Đèn Lồng Lớn,
-giữ Đảo Bến, Đảo Cau và Đảo Chuông sáng tới bình minh. Đỗ Minh Hoàng · 2A202603554 · L3A.
+giữ Đảo Bến, Đảo Cau và Đảo Chuông sáng tới bình minh.
+
+**Sinh viên:** Đỗ Minh Hoàng · **MSSV:** 2A202603554 · **Khóa/lớp:** K5-L3A.
+
+![Gameplay từ bản render thật](docs/demo/gameplay.png)
 
 ## Chạy trong 3 lệnh
 
-Cần Node.js 22+ và trình duyệt WebGL 2. macOS, Linux và Windows dùng cùng lệnh:
+Cần Node.js 22+, mạng khi cài dependency lần đầu, và trình duyệt hỗ trợ WebGL 2.
+macOS, Linux và Windows dùng cùng lệnh; benchmark cần phiên desktop có GPU/driver WebGL:
 
 ```sh
 npm ci
@@ -59,15 +64,37 @@ Pause → Cài đặt → **Bảng màu dễ phân biệt**: viền/mắt Bóng 
 Palette, âm lượng và độ nhạy chuột được lưu giữa các lần mở. Đèn tắt xẹp 20% và có vết rách
 để phân biệt bằng hình dáng ở cả chế độ màu thường.
 
+Phase 4 thêm đổi toàn bộ 9 phím trong Cài đặt (có báo trùng và khôi phục mặc định),
+**Giảm chuyển động**, **Chữ lớn ×1.25**. Chữ UI tối thiểu 18 px ở 1280×720,
+chữ lớn 22,5 px. Có chỉ báo hình ảnh cho Bóng Mực xuất hiện kèm mũi tên,
+gió sắp thổi, 10 giây cuối và đèn yếu. Reduced motion tắt blink nhân vật,
+orbit menu/easing camera và nhấp nháy cảnh báo UI; không có rung camera/chớp toàn màn hình.
+
+![Cài đặt và đổi phím](docs/screenshots/ui-settings.png)
+
+## Bảng xếp hạng cục bộ
+
+Sau khi thua hoặc thắng Đêm 3, nhập tên 3–12 ký tự `[A-Za-z0-9_]` để lưu.
+Điểm lưu là tổng các Đêm đã thắng; top 10 sắp theo điểm giảm, bằng điểm theo thời gian đạt trước.
+Menu có **Bảng xếp hạng** và **Xuất JSON**. Server lưu `.local/leaderboard.json`;
+đổi nơi lưu bằng `LANTERN_DATA_DIR`. File điểm người chơi không đưa vào Git.
+
+```sh
+node scripts/serve.mjs --export-leaderboard out.json
+```
+
+Nếu chỉ phục vụ `dist/` trên static hosting không có Node API, bảng dùng localStorage
+và xuất JSON bằng nút trong UI. CLI chính thức đọc file của server Node; dùng server này khi chấm export.
+
 Đêm 3 có điểm chưa rõ trong đề: origin v1.0 (0,0,0) nằm dưới tầng 2/tháp.
 Bản chơi dùng điểm đáp (0,6,6); headless vẫn giữ origin contract hoặc vị trí scenario.
-Giả định cần Coach xác nhận được ghi trong [spec Phase 2](docs/specs/phase-2.md).
+Đây là giả định thiết kế cho phần đề chưa định nghĩa, được ghi trong [spec Phase 2](docs/specs/phase-2.md).
 
 ## Test, headless và bằng chứng
 
 ```sh
 npm test
-npm run verify -- --phase 3
+npm run verify -- --phase 4
 node src/headless.mjs --seed 42 --night 2 --ticks 600 --out output.jsonl
 ```
 
@@ -80,15 +107,39 @@ Mỗi đèn snapshot có fuel (làm tròn 1 số lẻ), ever_lit, relit_count; p
 ```sh
 node scripts/replay-scenarios.mjs
 node scripts/replay-scenarios.mjs .work/phase3 tests/scenarios/phase-3/manifest.json
-node scripts/benchmark.mjs
-npm run verify:clean -- 3
+node scripts/bench.mjs --seed 42 --duration 30 --out bench.json
+node --expose-gc --max-semi-space-size=1 src/soak.mjs --seed 7 --nights 10 --out soak.json
+npm run verify:clean -- 4 --working-tree
 ```
 
-**68 test**, gồm 18 scenario CLI có kỳ vọng, mỗi scenario chạy hai lần so từng byte.
+**76 test**, gồm 18 scenario CLI có kỳ vọng, mỗi scenario chạy hai lần so từng byte
+và giữ nguyên hash output Phase 3. Có thêm test bench fixture/công thức, keybinds và leaderboard disk/HTTP/export.
 [Bằng chứng Phase 1](docs/proof/phase-1/README.md), [Phase 2](docs/proof/phase-2/README.md),
-[Phase 3](docs/proof/phase-3/README.md). Benchmark stress 21.600 bước đặt thời gian scenario 360 s,
-khác thời lượng mặc định các Đêm. **Chưa đo FPS hoặc kiểm chứng trực quan**, vì Browser Use
-chưa kết nối. Không khẳng định đã đạt test ẩn hoặc có video.
+[Phase 3](docs/proof/phase-3/README.md), [Phase 4](docs/proof/phase-4/README.md).
+`scripts/benchmark.mjs` cũ chỉ đo throughput headless; **không** phải benchmark FPS v1.3.
+Do chưa được commit, clean check Phase 4 tạo snapshot working tree trên clone sạch,
+ghi rõ base commit và hash file; không nhận snapshot này là tag đã phát hành.
+
+## Benchmark và soak
+
+Benchmark dùng Electron và **cùng renderer** Three.js, 1280×720, warmup 3 s rồi đo 30 s.
+200 Bóng Mực wander, 100 đom đóm, 3 đèn; tắt sinh thêm/sát thương/nhặt/dầu/kết thúc và
+chi tiết sáng tạo (moon/stars/clouds/cây/bob). Camera orbit 30 m, Y=15, 15 s/vòng.
+Launcher truyền `disable-frame-rate-limit` và `disable-gpu-vsync`; switch đầu cũng ngụ ý
+tắt GPU vsync theo [mã nguồn Chromium](https://chromium.googlesource.com/chromium/src/+/HEAD/components/viz/common/switches.cc).
+Raw dt ở `bench.frames.json`, chi tiết cảnh ở `bench.details.json`; P95 dùng nearest-rank.
+`peak_mem_mb=null`: bản web không có RSS riêng đáng tin cậy cho trang/GPU dùng chung;
+RSS của headless được đo riêng trong soak.
+
+Kết quả máy hiện tại: **296,9 FPS trung bình**, **170,8 FPS 1% low**, **load 1.173,5 ms**.
+Soak 10 Đêm cùng process: **0 crash**, RSS khoảng **38,66 → 45,64 MB**, dưới ngưỡng +20%.
+Các kết quả gốc là [bench.json](bench.json), [soak.json](soak.json); máy chấm của Coach mới quyết định điểm.
+Soak dùng seed `7+i` với i=0…9, chọn hướng mỗi 30 tick; GC tại ranh giới và nursery 1 MB
+để đo RSS nhất quán, không tăng baseline bằng dữ liệu đệm.
+
+Video dài khoảng 65 s, không có tiếng, quay trang render thật bằng FFmpeg từ replay có scenario/input công khai.
+Video hiển thị log test, output headless, bench và soak thật; **không phải thao tác chơi tay**.
+Quay lại bằng `npm run demo:record` sau khi chạy verify/bench/soak và build.
 
 CI test/build trên Windows, macOS, Linux. Hook chặn commit khi test đỏ:
 `git config core.hooksPath .githooks`.
@@ -98,13 +149,15 @@ CI test/build trên Windows, macOS, Linux. Hook chặn commit khi test đỏ:
 Biển mây, cây low-poly, trăng/sao, ánh đom đóm nhấp nhô, vòng Tỏa Sáng và chiếc đèn nhỏ
 trên nón lá đều tạo bằng hình học thủ tục. Nhạc/hiệu ứng tổng hợp bằng WebAudio.
 Trang trí/âm thanh không dùng RNG gameplay; headless không khởi tạo renderer.
-Test kiểm tra tính tất định; chưa có ảnh/video chứng minh hình ảnh.
+Test kiểm tra tính tất định; ảnh/video lấy trực tiếp từ ứng dụng đang chạy. Chi tiết sáng tạo tắt trong benchmark/soak.
 
 ## Hồ sơ lab
 
 - [Spec Phase 1](docs/specs/phase-1.md), [Phase 2](docs/specs/phase-2.md), [Phase 3](docs/specs/phase-3.md).
+- [Spec Phase 4](docs/specs/phase-4.md).
 - [ADR-003](docs/adr/003-lantern-fuel-and-dawn.md), [breaking changes](CHANGELOG.md).
 - [Tiến độ](docs/notes/progress.md), [nhật ký AI/token ước tính](docs/notes/ai-log.md), [retro](docs/notes/retro.md).
 - [Harness](AGENTS.md), [lab gốc](docs/lab/README-original.md), [checkpoints](CHECKPOINTS.md), [nộp bài](SUBMISSION.md).
 - [Nguồn](CREDITS.md), [LICENSE](LICENSE).
-- **Ticket-04 chưa được cung cấp:** chưa triển khai/tag Phase 4 và chưa tạo Release cuối `v1.0.0`.
+- [Hướng dẫn bàn giao](SUBMISSION.md#9-bàn-giao-bản-này): push lên `main` sẽ chạy kiểm tra và tự tạo tag `phase-4`, Release `v1.0.0` kèm ZIP/video khi đạt. Xem trạng thái thực tế ở tab Actions/Releases; tài liệu này không khẳng định workflow đã chạy.
+- Không cần fork/tạo thêm repo: dùng repo cá nhân hiện tại đúng tên/public theo [SUBMISSION.md](SUBMISSION.md).

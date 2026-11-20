@@ -1,0 +1,22 @@
+{
+  "mode": "automated-replay",
+  "duration_requested_s": 65,
+  "game_end": {
+    "type": "end",
+    "ticks": 2092,
+    "state": "playing",
+    "score": 150
+  },
+  "scenario": "public/demo.scenario.json",
+  "inputs": "public/demo.inputs.json",
+  "reports_shown": true,
+  "load_ms": 1597.001708984375,
+  "video": {
+    "file": "demo.mp4",
+    "frames": 971,
+    "fps": 15,
+    "duration_s": 64.73333333333333,
+    "audio": false,
+    "recording": "Actual Electron page capture; automated replay, not manual input"
+  }
+}

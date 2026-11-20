@@ -3,8 +3,28 @@ import { makeMap } from "/src/core/maps.mjs";
 import { View } from "./view.mjs";
 import { Audio } from "./audio.mjs";
 import { normalizeSettings, paletteFor } from "./presentation.mjs";
+import {
+  defaults,
+  actionNames,
+  updateBinding,
+  keyLabel,
+  matchesBinding,
+} from "./bindings.mjs";
+import { loadLeaderboard, saveScore } from "./storage.mjs";
 const $ = (id) => document.getElementById(id);
 try {
+  const captureConfig = window.lanternHost
+    ? await window.lanternHost.config()
+    : null;
+  const demoScenario =
+    captureConfig?.mode === "demo"
+      ? await fetch("/demo.scenario.json").then((r) => r.json())
+      : null;
+  const demoFrames =
+    captureConfig?.mode === "demo"
+      ? (await fetch("/demo.inputs.json").then((r) => r.json())).frames
+      : [];
+  let replayCursor = 0;
   const { tuning: t } = await fetch("/game.contract.json").then((r) =>
     r.json(),
   );
@@ -20,6 +40,17 @@ try {
       "--danger",
       paletteFor(settings.accessiblePalette).warning,
     );
+    view.reducedMotion = settings.reducedMotion;
+    document.documentElement.classList.toggle("large-text", settings.largeText);
+    document.documentElement.classList.toggle(
+      "reduced-motion",
+      settings.reducedMotion,
+    );
+  }
+  function persist() {
+    try {
+      localStorage.setItem("lantern-settings", JSON.stringify(settings));
+    } catch {}
   }
   applyPalette();
   $("accessible-palette").checked = settings.accessiblePalette;
@@ -29,6 +60,49 @@ try {
     try {
       localStorage.setItem("lantern-settings", JSON.stringify(settings));
     } catch {}
+  };
+  for (const [id, key] of [
+    ["reduced-motion", "reducedMotion"],
+    ["large-text", "largeText"],
+  ]) {
+    $(id).checked = settings[key];
+    $(id).onchange = () => {
+      settings[key] = $(id).checked;
+      applyPalette();
+      persist();
+    };
+  }
+  let rebinding = null;
+  function drawBindings() {
+    $("key-bindings").replaceChildren();
+    for (const [action, name] of Object.entries(actionNames)) {
+      const row = document.createElement("label"),
+        label = document.createElement("span"),
+        button = document.createElement("button");
+      label.textContent = name;
+      button.textContent =
+        rebinding === action
+          ? "Nhấn phím…"
+          : keyLabel(settings.bindings[action]);
+      button.type = "button";
+      button.onclick = () => {
+        rebinding = action;
+        $("binding-message").textContent = `Nhấn phím mới cho ${name}`;
+        drawBindings();
+      };
+      row.append(label, button);
+      $("key-bindings").append(row);
+    }
+  }
+  drawBindings();
+  $("bindings-reset").onclick = () => {
+    settings.bindings = { ...defaults };
+    rebinding = null;
+    keys.clear();
+    pending.clear();
+    persist();
+    drawBindings();
+    $("binding-message").textContent = "Đã khôi phục phím mặc định";
   };
   const audio = new Audio(settings);
   for (const key of ["volume", "sensitivity"]) {
@@ -54,7 +128,9 @@ try {
     requestedPause = false,
     settingsShown = false,
     countdownSecond = -1,
-    wasWarning = false;
+    wasWarning = false,
+    campaignSeed = 2027,
+    spawnCue = null;
   const keys = new Set(),
     pending = new Set();
   view.load(game);
@@ -80,7 +156,7 @@ try {
     mode = "menu";
     keys.clear();
     pending.clear();
-    hide("hud", "pause", "settings", "result", "intro");
+    hide("hud", "pause", "settings", "result", "intro", "leaderboard");
     show("menu");
   }
   function intro(n) {
@@ -103,7 +179,14 @@ try {
   function startNight() {
     // Headless retains the contract origin. The playable bell island starts on its upper landing.
     const spawnPos = night === 3 ? [0, 6, 6] : [0, 0, 0];
-    game = new Game({ tuning: t, seed: 2026 + night, night, spawnPos });
+    wonScores = wonScores.slice(0, night - 1);
+    game = new Game({
+      tuning: t,
+      seed: campaignSeed + night - 1,
+      night,
+      spawnPos,
+      scenario: demoScenario ?? {},
+    });
     view.load(game);
     mode = "play";
     keys.clear();
@@ -120,8 +203,9 @@ try {
     settingsShown = false;
     countdownSecond = -1;
     wasWarning = false;
+    spawnCue = null;
     yaw = 0;
-    hide("intro", "menu", "pause", "settings", "result");
+    hide("intro", "menu", "pause", "settings", "result", "leaderboard");
     show("hud");
     $("island-label").textContent =
       `ĐÊM ${night} · ${game.map.name.toLocaleUpperCase("vi-VN")}`;
@@ -136,7 +220,10 @@ try {
         document.createElement("i"),
       ),
     );
-    toast("Thắp đèn bằng E · Tỏa sáng bằng Q · Lướt bằng Shift", 4);
+    toast(
+      `Nạp/châm dầu ${keyLabel(settings.bindings.interact)} · Tỏa sáng ${keyLabel(settings.bindings.pulse)} · Lướt ${keyLabel(settings.bindings.dash)}`,
+      4,
+    );
   }
   $("start").onclick = () => {
     wonScores = [];
@@ -161,23 +248,91 @@ try {
     show("pause");
   };
   document.querySelectorAll(".back-menu").forEach((b) => (b.onclick = goMenu));
-  const controls = [
-    "Space",
-    "KeyQ",
-    "KeyE",
-    "KeyP",
-    "Escape",
-    "ShiftLeft",
-    "ShiftRight",
-  ];
+  let boardEntries = [];
+  async function openBoard() {
+    try {
+      const board = await loadLeaderboard();
+      boardEntries = board.entries;
+      mode = "leaderboard";
+      hide("menu", "hud", "pause", "settings", "result", "intro");
+      show("leaderboard");
+      $("board-source").textContent =
+        board.source === "disk"
+          ? "Top 10 · Lưu trên đĩa cục bộ"
+          : "Top 10 · Lưu trong trình duyệt";
+      $("board-rows").replaceChildren();
+      board.entries.forEach((entry, i) => {
+        const tr = document.createElement("tr");
+        for (const text of [
+          i + 1,
+          entry.name,
+          entry.score.toLocaleString("vi-VN"),
+          entry.nights_won,
+        ]) {
+          const td = document.createElement("td");
+          td.textContent = text;
+          tr.append(td);
+        }
+        $("board-rows").append(tr);
+      });
+      if (!board.entries.length)
+        $("board-source").textContent =
+          "Chưa có điểm — hãy bắt đầu chuyến đi đầu tiên.";
+    } catch (error) {
+      toast(error.message);
+    }
+  }
+  $("leaderboard-open").onclick = openBoard;
+  $("board-export").onclick = () => {
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(
+      new Blob([JSON.stringify({ entries: boardEntries }, null, 2)], {
+        type: "application/json",
+      }),
+    );
+    a.download = "leaderboard.json";
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  };
+  $("score-form").onsubmit = async (event) => {
+    event.preventDefault();
+    try {
+      await saveScore({
+        name: $("player-name").value,
+        score: wonScores.reduce((a, b) => a + b, 0),
+        nights_won: wonScores.length,
+        achieved_at: new Date().toISOString(),
+        seed: campaignSeed,
+      });
+      $("score-message").textContent = "Đã lưu vào bảng xếp hạng";
+      $("save-score").disabled = true;
+    } catch (error) {
+      $("score-message").textContent = error.message;
+    }
+  };
   addEventListener("keydown", (e) => {
+    if (rebinding) {
+      e.preventDefault();
+      try {
+        settings.bindings = updateBinding(settings.bindings, rebinding, e.code);
+        rebinding = null;
+        persist();
+        keys.clear();
+        pending.clear();
+        drawBindings();
+        $("binding-message").textContent = "Đã lưu phím mới";
+      } catch (error) {
+        $("binding-message").textContent = error.message;
+      }
+      return;
+    }
     const onControl =
       e.target instanceof Element &&
       e.target.closest("input,button,select,textarea");
     if (
       onControl &&
       (mode !== "play" || game.state === "paused") &&
-      !["Escape", "KeyP"].includes(e.code)
+      !matchesBinding(settings.bindings, "pause", e.code)
     )
       return;
     if (
@@ -188,14 +343,19 @@ try {
       e.preventDefault();
     if (e.repeat) return;
     keys.add(e.code);
-    if (controls.includes(e.code)) pending.add(e.code);
-    if ((e.code === "Escape" || e.code === "KeyP") && mode === "play") {
+    if (
+      ["jump", "dash", "interact", "pulse"].some((a) =>
+        matchesBinding(settings.bindings, a, e.code),
+      )
+    )
+      pending.add(e.code);
+    if (matchesBinding(settings.bindings, "pause", e.code) && mode === "play") {
       requestedPause = true;
       keys.delete(e.code);
       pending.delete(e.code);
     }
     if (
-      e.code === "Space" &&
+      matchesBinding(settings.bindings, "jump", e.code) &&
       mode === "play" &&
       game.state === "playing" &&
       game.player.grounded
@@ -206,7 +366,8 @@ try {
   addEventListener("blur", () => {
     keys.clear();
     pending.clear();
-    if (mode === "play" && game.state === "playing") requestedPause = true;
+    if (!captureConfig && mode === "play" && game.state === "playing")
+      requestedPause = true;
   });
   $("world").addEventListener("pointerdown", (e) => {
     drag = true;
@@ -220,8 +381,10 @@ try {
       lastX = e.clientX;
     }
   });
-  function action(code) {
-    return keys.has(code) || pending.has(code);
+  function action(name) {
+    return [...keys, ...pending].some((code) =>
+      matchesBinding(settings.bindings, name, code),
+    );
   }
   function finish() {
     mode = "result";
@@ -247,6 +410,9 @@ try {
       : `${game.score.toLocaleString("vi-VN")} điểm Đêm này`;
     $("restart").textContent = "Chơi lại Đêm";
     $("next-night").classList.toggle("hidden", !won || night === 3);
+    $("score-form").classList.toggle("hidden", won && night !== 3);
+    $("score-message").textContent = "";
+    $("save-score").disabled = false;
   }
   function hud() {
     const p = game.player,
@@ -273,9 +439,9 @@ try {
       s.classList.toggle("full", i < p.carried),
     );
     $("pulse-label").innerHTML =
-      `Q <span>${p.pulseCd ? `${(p.pulseCd / 60).toFixed(1)} s` : "Tỏa sáng · 3"}</span>`;
+      `${keyLabel(settings.bindings.pulse)} <span>${p.pulseCd ? `${(p.pulseCd / 60).toFixed(1)} s` : "Tỏa sáng · 3"}</span>`;
     $("dash-label").innerHTML =
-      `SHIFT <span>${p.charm ? "Bùa Gió" : p.dashCd ? `${(p.dashCd / 60).toFixed(1)} s` : "Lướt"}</span>`;
+      `${keyLabel(settings.bindings.dash)} <span>${p.charm ? "Bùa Gió" : p.dashCd ? `${(p.dashCd / 60).toFixed(1)} s` : "Lướt"}</span>`;
     const near = game.nearestLantern(p.pos, (l) => game.acceptsMotes(l));
     $("interact").classList.toggle(
       "hidden",
@@ -285,8 +451,8 @@ try {
     );
     if (near)
       $("interact").textContent = near.lit
-        ? `${game.fuel(near) < 30 ? warning : ""}E — Châm dầu (${game.fuel(near).toFixed(1)}/100)`
-        : `E — Nạp ánh sáng (${near.deposited}/${game.lightingCost(near)})`;
+        ? `${game.fuel(near) < 30 ? warning : ""}${keyLabel(settings.bindings.interact)} — Châm dầu (${game.fuel(near).toFixed(1)}/100)`
+        : `${keyLabel(settings.bindings.interact)} — Nạp ánh sáng (${near.deposited}/${game.lightingCost(near)})`;
     const l =
       game.nearestLantern(p.pos, (l) => !l.lit) ??
       game.nearestLantern(p.pos, (l) => l.lit && game.fuel(l) < 30);
@@ -304,6 +470,26 @@ try {
         Math.atan2(projected.x, projected.y) + (projected.z > 1 ? Math.PI : 0);
       $("direction-icon").style.transform = `rotate(${angle}rad)`;
     } else hide("direction");
+    const cues = [];
+    if (game.wind.warning) cues.push("⚠ Gió mạnh sắp thổi");
+    if (seconds <= 10) cues.push(`⚠ Còn ${seconds} giây tới bình minh`);
+    const weak = game.lanterns.filter((l) => l.lit && game.fuel(l) < 30);
+    if (weak.length)
+      cues.push(`⚠ Dầu thấp: ${weak.map((l) => l.id).join(", ")}`);
+    if (spawnCue && time < spawnCue.until)
+      cues.push("⚠ Bóng Mực vừa xuất hiện");
+    $("visual-cues").textContent = cues.join(" · ");
+    if (spawnCue && time < spawnCue.until) {
+      const p = view.project(spawnCue.pos),
+        x = p.x * (p.z > 1 ? -1 : 1),
+        y = p.y * (p.z > 1 ? -1 : 1),
+        scale = 0.9 / Math.max(Math.abs(x), Math.abs(y), 0.01);
+      $("spawn-arrow").style.left = `${50 + x * scale * 45}%`;
+      $("spawn-arrow").style.top = `${50 - y * scale * 45}%`;
+      $("spawn-arrow").style.transform =
+        `translate(-50%,-50%) rotate(${Math.atan2(x, y)}rad)`;
+      show("spawn-arrow");
+    } else hide("spawn-arrow");
   }
   function animate(now) {
     requestAnimationFrame(animate);
@@ -321,23 +507,34 @@ try {
       while (accumulator >= DT && mode === "play") {
         const pause = requestedPause;
         requestedPause = false;
-        const events = game.step({
+        const normalInput = {
           move: [
-            Number(keys.has("KeyA")) - Number(keys.has("KeyD")),
-            Number(keys.has("KeyW")) - Number(keys.has("KeyS")),
+            Number(action("left")) - Number(action("right")),
+            Number(action("forward")) - Number(action("backward")),
           ],
           cam_yaw_deg: (yaw * 180) / Math.PI,
-          jump: action("Space"),
-          interact: action("KeyE"),
-          pulse: action("KeyQ"),
-          dash: action("ShiftLeft") || action("ShiftRight"),
+          jump: action("jump"),
+          interact: action("interact"),
+          pulse: action("pulse"),
+          dash: action("dash"),
           pause,
-        });
+        };
+        const replayInput =
+          demoFrames[replayCursor]?.tick === game.tick
+            ? demoFrames[replayCursor++]
+            : {};
+        const events = game.step(
+          captureConfig?.mode === "demo" ? replayInput : normalInput,
+        );
         pending.clear();
         accumulator -= DT;
         for (const e of events) {
           audio.event(e.name, e.data.result);
           if (e.name === "pulse") view.pulseAt(game.player.pos);
+          if (e.name === "shade_spawned") {
+            const shade = game.shades.find((s) => s.id === e.data.id);
+            if (shade) spawnCue = { pos: [...shade.pos], until: time + 4 };
+          }
           if (e.name === "lantern_lit") toast("Một ngọn đèn. Một lời hứa.");
           if (e.name === "lantern_out")
             toast(
@@ -388,6 +585,143 @@ try {
       menu: mode === "menu" || mode === "intro",
     });
     if (mode === "play" || mode === "result") hud();
+    if (captureConfig) captureTick(now);
+  }
+  const captures = {},
+    fontSamples = {},
+    demoStarted = performance.now();
+  let firstFrame = true,
+    captureDone = false,
+    reports;
+  function fontMinimum() {
+    return Math.min(
+      ...[...document.querySelectorAll("body *")]
+        .filter(
+          (e) =>
+            e.getClientRects().length &&
+            [...e.childNodes].some(
+              (n) => n.nodeType === 3 && n.textContent.trim(),
+            ),
+        )
+        .map((e) => parseFloat(getComputedStyle(e).fontSize)),
+    );
+  }
+  async function captureTick(now) {
+    if (firstFrame) {
+      firstFrame = false;
+      await window.lanternHost.firstFrame();
+    }
+    if (captureDone) return;
+    const elapsed = (now - demoStarted) / 1000;
+    if (captureConfig.mode === "capture") {
+      if (elapsed > 1 && !captures.menu) {
+        captures.menu = true;
+        fontSamples.menu = fontMinimum();
+        await window.lanternHost.capture("menu");
+      }
+      if (elapsed > 2 && !captures.start) {
+        captures.start = true;
+        startNight();
+      }
+      if (elapsed > 3 && !captures.game) {
+        captures.game = true;
+        fontSamples.game = fontMinimum();
+        await window.lanternHost.capture("game");
+      }
+      if (elapsed > 4 && !captures.settings) {
+        captures.settings = true;
+        game.step({ pause: true });
+        hide("pause");
+        show("settings");
+        fontSamples.settings = fontMinimum();
+        await window.lanternHost.capture("settings");
+      }
+      if (elapsed > 5 && !captures.large) {
+        captures.large = true;
+        settings.largeText = true;
+        settings.accessiblePalette = true;
+        settings.reducedMotion = true;
+        $("large-text").checked = true;
+        $("accessible-palette").checked = true;
+        $("reduced-motion").checked = true;
+        applyPalette();
+        fontSamples.large = fontMinimum();
+        await window.lanternHost.capture("large");
+      }
+      if (elapsed >= captureConfig.duration) {
+        captureDone = true;
+        await window.lanternHost.complete({
+          mode: "ui-capture",
+          width: innerWidth,
+          height: innerHeight,
+          font_samples_px: fontSamples,
+          large_scale:
+            parseFloat(getComputedStyle(document.documentElement).fontSize) /
+            18,
+          settings: {
+            accessiblePalette: settings.accessiblePalette,
+            largeText: settings.largeText,
+            reducedMotion: settings.reducedMotion,
+          },
+          status: Object.values(fontSamples).every((x) => x >= 18)
+            ? "passed"
+            : "failed",
+        });
+      }
+    } else if (captureConfig.mode === "demo") {
+      if (elapsed > 6 && !captures.game) {
+        captures.game = true;
+        await window.lanternHost.capture();
+      }
+      if (elapsed > 35) {
+        mode = "demo-report";
+        hide("hud", "pause", "settings", "result");
+        show("demo-report");
+        const title =
+          elapsed < 45
+            ? "Kiểm thử & headless"
+            : elapsed < 55
+              ? "Benchmark đồ họa"
+              : "Soak test 10 Đêm";
+        $("demo-report-title").textContent = title;
+        if (reports) {
+          $("demo-report-text").textContent =
+            elapsed < 45
+              ? `Test thật: ${reports.testCount} test đạt\nHeadless: ${reports.headless}\n18 scenario tất định · 60 tick/giây\nReplay dùng scenario và inputs công khai\nChưa commit/push theo yêu cầu người dùng`
+              : elapsed < 55
+                ? `Cửa sổ 1280×720 · 30 giây + warmup 3 giây\n200 Bóng Mực · 100 đom đóm · 3 đèn sáng\nFPS trung bình: ${reports.bench.avg_fps.toFixed(1)}\n1% low: ${reports.bench.p1_low_fps.toFixed(1)} FPS\nP95: ${reports.bench.frame_ms_p95.toFixed(2)} ms\nLoad: ${reports.bench.load_ms} ms`
+                : `Cùng một tiến trình · 10 Đêm\nCrash: ${reports.soak.crashes}\nRSS đầu: ${reports.soak.mem_start_mb.toFixed(2)} MB\nRSS cuối: ${reports.soak.mem_end_mb.toFixed(2)} MB\nGiới hạn: ${(reports.soak.mem_start_mb * 1.2).toFixed(2)} MB\nKết quả: ${reports.soak.results.join(", ")}`;
+        }
+      }
+      if (elapsed >= captureConfig.duration) {
+        captureDone = true;
+        await window.lanternHost.complete({
+          mode: "automated-replay",
+          duration_requested_s: captureConfig.duration,
+          game_end: game.end(),
+          scenario: "public/demo.scenario.json",
+          inputs: "public/demo.inputs.json",
+          reports_shown: Boolean(reports),
+        });
+      }
+    }
+  }
+  if (captureConfig?.mode === "demo") {
+    const [bench, soak, tests, headless] = await Promise.all([
+      fetch("/evidence/bench.json").then((r) => r.json()),
+      fetch("/evidence/soak.json").then((r) => r.json()),
+      fetch("/evidence/tests.txt").then((r) => r.text()),
+      fetch("/evidence/headless.jsonl").then((r) => r.text()),
+    ]);
+    reports = {
+      bench,
+      soak,
+      testCount: Number(/pass\s+(\d+)/.exec(tests)?.[1] ?? 0),
+      headless: headless.trim().split("\n").at(-1),
+    };
+    campaignSeed = captureConfig.seed;
+    startNight();
+    show("demo-caption");
   }
   requestAnimationFrame(animate);
 } catch (error) {
@@ -395,4 +729,5 @@ try {
   $("error").textContent =
     `Không khởi tạo được game: ${error.message}. Cần trình duyệt hỗ trợ WebGL 2.`;
   console.error(error);
+  window.lanternHost?.complete({ error: error.stack });
 }

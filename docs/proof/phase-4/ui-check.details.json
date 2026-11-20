@@ -1,0 +1,18 @@
+{
+  "mode": "ui-capture",
+  "width": 1280,
+  "height": 720,
+  "font_samples_px": {
+    "menu": 18,
+    "game": 18,
+    "settings": 18,
+    "large": 22.5
+  },
+  "large_scale": 1.25,
+  "settings": {
+    "accessiblePalette": true,
+    "largeText": true,
+    "reducedMotion": true
+  },
+  "status": "passed"
+}

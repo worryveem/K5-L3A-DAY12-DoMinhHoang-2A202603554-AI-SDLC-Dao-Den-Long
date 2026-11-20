@@ -1,0 +1,16 @@
+{
+  "recorded_at": "2026-11-20T14:21:47.251Z",
+  "head": "636a187f9a1b8d74c40f625e80602d7fce5a6d0e",
+  "status": "local changes intentionally uncommitted",
+  "forbidden_env_paths": [],
+  "common_secret_pattern_findings": [],
+  "working_text_files_scanned": 160,
+  "scope": "Nonignored working text and historical text blobs checked for common key patterns; historical filenames checked for .env. Not an exhaustive secret detector.",
+  "tags": [
+    "phase-1",
+    "phase-2",
+    "phase-3"
+  ],
+  "historical_text_blobs_scanned": 175,
+  "historical_common_secret_pattern_findings": []
+}

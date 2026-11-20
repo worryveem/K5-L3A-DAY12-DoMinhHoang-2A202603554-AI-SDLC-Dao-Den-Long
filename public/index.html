@@ -10,6 +10,7 @@
   <body>
     <canvas id="world" aria-label="Đảo Đèn Lồng — game 3D"></canvas>
     <div id="error" class="panel hidden" role="alert"></div>
+    <div id="demo-caption" class="hidden">REPLAY TỰ ĐỘNG · SCENARIO KIỂM CHỨNG</div>
     <main id="menu" class="screen">
       <div class="eyebrow">MỘT CHUYẾN ĐI GIỮA BIỂN MÂY</div>
       <h1>Đảo<br /><em>Đèn Lồng</em></h1>
@@ -17,6 +18,7 @@
         Đêm có thể dài.<br />Nhưng một đốm sáng cũng đủ để bắt đầu.
       </p>
       <button id="start" class="primary">Thắp lại hòn đảo</button>
+      <button id="leaderboard-open">Bảng xếp hạng</button>
       <div class="legend">
         <span>W A S D <small>di chuyển</small></span
         ><span>SPACE <small>nhảy</small></span
@@ -40,6 +42,14 @@
         </div>
       </header>
       <div id="toast" role="status"></div>
+      <div id="visual-cues" aria-live="polite"></div>
+      <div
+        id="spawn-arrow"
+        class="hidden"
+        aria-label="Hướng Bóng Mực mới xuất hiện"
+      >
+        ▲
+      </div>
       <div id="objective">Gom đom đóm. Mang ánh sáng trở về.</div>
       <div id="direction" aria-label="Hướng đèn gần nhất">
         <b id="direction-icon">▲</b><span></span>
@@ -92,6 +102,16 @@
           ><input id="accessible-palette" type="checkbox" /> Bảng màu dễ phân
           biệt</label
         >
+        <label class="check-setting"
+          ><input id="reduced-motion" type="checkbox" /> Giảm chuyển động</label
+        >
+        <label class="check-setting"
+          ><input id="large-text" type="checkbox" /> Chữ lớn ×1.25</label
+        >
+        <h3>Điều khiển</h3>
+        <div id="key-bindings"></div>
+        <p id="binding-message" role="alert"></p>
+        <button id="bindings-reset">Khôi phục phím mặc định</button>
         <button id="settings-close" class="primary">Quay lại</button>
       </div>
     </div>
@@ -101,11 +121,48 @@
         <h2 id="result-title"></h2>
         <p id="result-text"></p>
         <div id="result-score"></div>
+        <form id="score-form" class="hidden">
+          <label
+            >Tên trên bảng xếp hạng<input
+              id="player-name"
+              type="text"
+              minlength="3"
+              maxlength="12"
+              pattern="[A-Za-z0-9_]{3,12}"
+              autocomplete="off"
+              required
+              placeholder="May_2026" /></label
+          ><button id="save-score" type="submit">Lưu điểm</button>
+          <p id="score-message" role="status"></p>
+        </form>
         <button id="restart" class="primary">Chơi lại Đêm</button
         ><button id="next-night" class="hidden">Đêm kế tiếp</button
         ><button class="back-menu">Về menu</button>
       </div>
     </div>
+    <div id="leaderboard" class="screen center hidden">
+      <div class="panel board-panel">
+        <div class="eyebrow">NHỮNG NGƯỜI GIỮ ÁNH SÁNG</div>
+        <h2>Bảng xếp hạng</h2>
+        <p id="board-source"></p>
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>Hạng</th>
+                <th>Tên</th>
+                <th>Điểm</th>
+                <th>Đêm thắng</th>
+              </tr>
+            </thead>
+            <tbody id="board-rows"></tbody>
+          </table>
+        </div>
+        <button id="board-export">Xuất JSON</button
+        ><button class="back-menu">Về menu</button>
+      </div>
+    </div>
+    <div id="demo-report" class="screen center hidden"><div class="panel board-panel"><div class="eyebrow">BẰNG CHỨNG CHẠY THẬT · LOCAL</div><h2 id="demo-report-title"></h2><pre id="demo-report-text"></pre></div></div>
     <script type="module" src="/app.mjs"></script>
   </body>
 </html>

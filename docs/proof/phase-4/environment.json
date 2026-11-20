@@ -1,0 +1,14 @@
+{
+  "recorded_at": "2026-11-20T15:13:10.874Z",
+  "phase": "4",
+  "node": "v24.21.0",
+  "platform": "win32",
+  "arch": "x64",
+  "cpu": "12th Gen Intel(R) Core(TM) i5-12500H",
+  "memory_gb": 16,
+  "base_commit": "636a187f9a1b8d74c40f625e80602d7fce5a6d0e",
+  "working_tree": "Generated from current working tree. base_commit is the last commit, not a claim that current source/evidence is committed.",
+  "test_exit_code": 0,
+  "build_exit_code": 0,
+  "test_output_sha256": "a7f385f2580e6f56041103af4c4d4c19475bc22982459a614fdcd9c2c8e964e8"
+}

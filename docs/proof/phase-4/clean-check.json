@@ -1,0 +1,717 @@
+{
+  "recorded_at": "2026-11-20T15:14:06.360Z",
+  "commit": "636a187f9a1b8d74c40f625e80602d7fce5a6d0e",
+  "source_mode": "uncommitted working-tree snapshot over clean clone",
+  "source_hashes": [
+    {
+      "file": "bench.details.json",
+      "sha256": "e3f933e64b8b1d565c0712f1e241081897bd54bea1225cd7ca4b27824e42a51a"
+    },
+    {
+      "file": "bench.frames.json",
+      "sha256": "149581e1e850724a49d64bc34364e71c2929daf03b63745b864650c0046d565c"
+    },
+    {
+      "file": "bench.json",
+      "sha256": "1416a3602a78d42a5157cfadf440865f05560b4a43dda13e02ad69d313fd2cc4"
+    },
+    {
+      "file": "docs/demo/capture.details.json",
+      "sha256": "3876952b6318352fa37b8f63af73af4170d19b85f4e1b7b76690e0611bba6552"
+    },
+    {
+      "file": "docs/demo/capture.json",
+      "sha256": "d1bf1206614f6cc1bcdc79a38e30849604e0987aca0b69068e35d1be5ed75c33"
+    },
+    {
+      "file": "docs/demo/demo.mp4",
+      "sha256": "30ab59c553452f6cd65e78a3dd22de633cec6be59ae75fc4f420d42b69ddda27"
+    },
+    {
+      "file": "docs/demo/gameplay.png",
+      "sha256": "0d5ee9af0312c230da5326b00491b4353d429a46724cd4bc72831defba3ba73a"
+    },
+    {
+      "file": "docs/notes/release-v1.0.0.md",
+      "sha256": "3c42af80320b744d00586e4da88c559db0100110587969fc1a602043e1fb1813"
+    },
+    {
+      "file": "docs/screenshots/benchmark.png",
+      "sha256": "325e0f98e7343517d680cd243c9f63ae50b1d69f191f556cb1e0bcce5e64a1cd"
+    },
+    {
+      "file": "docs/screenshots/ui-game.png",
+      "sha256": "eba84033d4bb52016144263c43e9cd78d5ff783b65dab72a1e8dcf20fc8068c6"
+    },
+    {
+      "file": "docs/screenshots/ui-large.png",
+      "sha256": "a01bd4b1d57ced939779e9e772ee8a67ab16a7cd11eefe9edbec8e53ab0d761f"
+    },
+    {
+      "file": "docs/screenshots/ui-menu.png",
+      "sha256": "c46342b18b88b519c01d9a5ab2ec99e3e1f56d2ae067f45a5803e78fec97b89a"
+    },
+    {
+      "file": "docs/screenshots/ui-settings.png",
+      "sha256": "0df5992135dd1162f3d2084dedd29e648d35f85d69a8cd7b5093f85993b4cc7e"
+    },
+    {
+      "file": "docs/specs/phase-4.md",
+      "sha256": "326362072ce1baf03f2e7916eef0a115e44de8720d25b81d19624f71d22a495f"
+    },
+    {
+      "file": "public/bench.html",
+      "sha256": "81afcc08d77834b8eae434b8af307d82e629f18adaecd103a2e4bdb602f697e1"
+    },
+    {
+      "file": "public/bench.mjs",
+      "sha256": "2d62351273e564934521417f2bdf9cc06f324c94d159e82d716cbbbd24693fba"
+    },
+    {
+      "file": "public/bindings.mjs",
+      "sha256": "3ebd0ae583bf77cbb8b437f0f27e43727cdd69a5186c65498f2720054c3ec33b"
+    },
+    {
+      "file": "public/demo.inputs.json",
+      "sha256": "01a7ffd7d85660aa83564e80823699db0b4d5c44a39bb2c6ae05eeab07b31063"
+    },
+    {
+      "file": "public/demo.scenario.json",
+      "sha256": "2d90698acb74184151291edd5e64a6a38806a65243ea45eeb8b262cd0d5f2769"
+    },
+    {
+      "file": "public/storage.mjs",
+      "sha256": "2030bc34e95caeadf2b55840c41e61039e316406ac3fa72d5228823c9046cacc"
+    },
+    {
+      "file": "scripts/bench.mjs",
+      "sha256": "ac72ffc2a44a3a685be0ffddc89a5053ddadfc2ba992cbe8b3b67c0ccbaad848"
+    },
+    {
+      "file": "scripts/electron-main.cjs",
+      "sha256": "a45bc9552ed976c4d941a38eac1a4817480059f378d8f56de463b93fe1d6df6c"
+    },
+    {
+      "file": "scripts/electron-preload.cjs",
+      "sha256": "7d9453c13536d88b5cd732b5d3167f809ebfb3306a6905ea2359fb4aba7cbae2"
+    },
+    {
+      "file": "scripts/package-release.py",
+      "sha256": "4eaf48f325891c88cce1748dc42888064cb6f22f456c2b1470786cc1f0bae048"
+    },
+    {
+      "file": "scripts/publish-release.sh",
+      "sha256": "8ae7d3133b83d7959f35a6655d795311e09b6e78a75722fab723cacc513bc21b"
+    },
+    {
+      "file": "scripts/verify-release.mjs",
+      "sha256": "3963bb26a78f39d10f26970a53a8ebae0b93128e6e97dec64ff521e92af670e1"
+    },
+    {
+      "file": "soak.details.json",
+      "sha256": "ff27de3f5575d916bedc2b292c1451c44fe103d95cfc5e3835b64d4c64da67e1"
+    },
+    {
+      "file": "soak.json",
+      "sha256": "068e4658c967a736c6e250394f7558ae70c851d1b65d985b067468a1008dbd75"
+    },
+    {
+      "file": "src/core/benchmark.mjs",
+      "sha256": "93fe443569e89bcc8c369a0b5e02ce7cbdbe8d037037d3757e39ef9678a6473d"
+    },
+    {
+      "file": "src/local/leaderboard-core.mjs",
+      "sha256": "5092d6c26cadf808b46256288ff4bf0e518b74c17a347243aefed7f7b2124f20"
+    },
+    {
+      "file": "src/local/leaderboard.mjs",
+      "sha256": "c18f566699bf5e16c500e17cac555478efb9f817fd40703c83c168552339701c"
+    },
+    {
+      "file": "src/server.mjs",
+      "sha256": "d49441acc5a322e05777381154d8c26ecb026212fe32f6fb3806ba482ce47d76"
+    },
+    {
+      "file": "src/soak.mjs",
+      "sha256": "1624f01303d7767bc04c4f9225f3be5e660569de436388a14f33c5e5b4a67e14"
+    },
+    {
+      "file": "tests/phase-4.test.mjs",
+      "sha256": "e0360d79588f8c4a52c028aa71b200804b779afbbc4ff2ccf7fd37ef17b47ff1"
+    },
+    {
+      "file": ".gitattributes",
+      "sha256": "1790d9ab10c708629851416c53c1e22244dbc6efa4621458cf2095afa0b1f86d"
+    },
+    {
+      "file": ".githooks/pre-commit",
+      "sha256": "e0896dabf505fa87906c4f115f2b3fcc3a7239f8ee62714616e1979fa8c9f1ed"
+    },
+    {
+      "file": ".github/workflows/verify.yml",
+      "sha256": "3c9c0c8fed22a03a76748c9e1b41a370b66e7615b8eec174d493440fdf252242"
+    },
+    {
+      "file": ".gitignore",
+      "sha256": "47a8be5f6bbd8ae07b7258414a9fe6f8f9e2fb097fe5cb8c68bca7f8590f1590"
+    },
+    {
+      "file": "AGENTS.md",
+      "sha256": "c594c5b6e046b6cea4aebbb4b0d26e66ea125d72b85042dad3434c0ae8ab4174"
+    },
+    {
+      "file": "CHANGELOG.md",
+      "sha256": "1eccf9e8d685a91d4bd53a6f121285ebb2b5170cbedf020983f721644d4ed92c"
+    },
+    {
+      "file": "CHECKPOINTS.md",
+      "sha256": "af8ddd2ddbff0e271475e16980267776baaf709260a0eb5abb1184ba5bd7faf5"
+    },
+    {
+      "file": "CREDITS.md",
+      "sha256": "64aa33c682002f3e3b62441362670b5aa07080c93f12eb45edebc5e7088e6aba"
+    },
+    {
+      "file": "GUIDE.md",
+      "sha256": "ba157a8d65389a696eed758e12f9233500256c7178372877b7e1f31e2f7618ca"
+    },
+    {
+      "file": "LICENSE",
+      "sha256": "8118ed2d9ff359634a59052797d28a01b599f731da4c8532013bca9c6c372b07"
+    },
+    {
+      "file": "README.md",
+      "sha256": "63df7fea4b9411ceeb8f50f6e2b1c6550cc1d55781222160d2bf38c27edb0409"
+    },
+    {
+      "file": "RUBRIC.md",
+      "sha256": "ccbf368e60a835d141aa226ca33eaa67f5a290e0f2398b3a1c08ea31b1de0573"
+    },
+    {
+      "file": "RULES.md",
+      "sha256": "599acc7d3ff09e33cb34246adce2ed75f0e2d67931d50101f56286309ccb781c"
+    },
+    {
+      "file": "SUBMISSION.md",
+      "sha256": "3f13136a41cb0a063f3a76624a0a6ff303ed52db02db34537e9e7a9abde94143"
+    },
+    {
+      "file": "docs/adr/003-lantern-fuel-and-dawn.md",
+      "sha256": "0f276e764be4751d1211b9024a67ac5de78ef92c20ae139affd2b67878cc505b"
+    },
+    {
+      "file": "docs/lab/README-original.md",
+      "sha256": "24edfc02020ba0d0bb6d58881d22a66895132e3ce8a17f5485ab1af82530159c"
+    },
+    {
+      "file": "docs/notes/ai-log.md",
+      "sha256": "c66a3bfbc65c0dd088caa58209cc18ed27fba9985349411a253d3de9afc05233"
+    },
+    {
+      "file": "docs/notes/progress.md",
+      "sha256": "812f8d3f112eae1c441804e9deb204b254fa892146592c9a440d93d0af357924"
+    },
+    {
+      "file": "docs/notes/retro.md",
+      "sha256": "e84d5da67ed3760e5450ce197b4842720c4c0d437bdc6f023bcbfd1652f82af9"
+    },
+    {
+      "file": "docs/proof/phase-1/README.md",
+      "sha256": "cb7262c589d51840269fb6ddde1bcf158a8449ca8951ce91e3abfeb5dc4e5bf3"
+    },
+    {
+      "file": "docs/proof/phase-1/build.txt",
+      "sha256": "9ed70dfe6d589ff5213da5a7cbdfa1d04ced246b4589b86eb8c210e8482620e6"
+    },
+    {
+      "file": "docs/proof/phase-1/environment.json",
+      "sha256": "639ef3261f4df970ecfb9b44a7343028635f2b2686a48498a6510f18e5a05655"
+    },
+    {
+      "file": "docs/proof/phase-1/http.json",
+      "sha256": "da78d91ade3233afbffdf8da85b1d28f0cb67d038e132167a26dc073dc352e8c"
+    },
+    {
+      "file": "docs/proof/phase-1/tests.txt",
+      "sha256": "e64c8f3d511e4f119739c8a3410527dc8a1f1b690be4edcd4a33079329c52f49"
+    },
+    {
+      "file": "docs/proof/phase-2/README.md",
+      "sha256": "594cba4affe53eb3bb6c658e94f16a13fb3b0a4da55efa7baa5817262868a38a"
+    },
+    {
+      "file": "docs/proof/phase-2/benchmark.json",
+      "sha256": "6a0779869a94f1f8080e12fbe45516a8b2f534114f4f05820f175e2c4863e693"
+    },
+    {
+      "file": "docs/proof/phase-2/build.txt",
+      "sha256": "a8e555fe05024d4721ae275978284b8464e8a0b7e8f8bfedc27845c5863c663b"
+    },
+    {
+      "file": "docs/proof/phase-2/clean-check.json",
+      "sha256": "8f148e7ed4054ac32fac18289b4dc7a327a1837c1e7e40e7bb663a0400d639d4"
+    },
+    {
+      "file": "docs/proof/phase-2/clean-check.txt",
+      "sha256": "8931d375f7442dedfcaef0b06a88ebe02772c19408a5fec5fddf4651eaea2893"
+    },
+    {
+      "file": "docs/proof/phase-2/environment.json",
+      "sha256": "642969369045efa73e81498f2f19172cc4945d94316cc40d30a61a776609ca1b"
+    },
+    {
+      "file": "docs/proof/phase-2/http.json",
+      "sha256": "a2c2f599ec7f447d9b5033a6b7bccff7af70ba88bebd67c6637ef5a7e918ecf1"
+    },
+    {
+      "file": "docs/proof/phase-2/scenarios/charm.jsonl",
+      "sha256": "32bec9b69288d98b7a441508a8239bce1679c22a26fbcbe72811af4add7b35a0"
+    },
+    {
+      "file": "docs/proof/phase-2/scenarios/dash.jsonl",
+      "sha256": "89db5fef97a8ca1524a72167f6056209bcb199598522ed6cdb46f48558cacd30"
+    },
+    {
+      "file": "docs/proof/phase-2/scenarios/drifter-drop.jsonl",
+      "sha256": "e1c6d63a09a733a664676d6f8365dfdb8a09dd7fd539049621321093ccaf334b"
+    },
+    {
+      "file": "docs/proof/phase-2/scenarios/drifter-steal.jsonl",
+      "sha256": "02771fe8200a0992666090e4485de6add8a42cc556937e691c5205fe49859b47"
+    },
+    {
+      "file": "docs/proof/phase-2/scenarios/fall-respawn.jsonl",
+      "sha256": "093180f1c313a0b3c086ef26eda05a3035be42a90cf2b599890cf2fd30ce0cb1"
+    },
+    {
+      "file": "docs/proof/phase-2/scenarios/last-tick-win.jsonl",
+      "sha256": "766ef15f451d942afdb3b76f0e497a7810688f3839aaab5eba6b190ce1d40002"
+    },
+    {
+      "file": "docs/proof/phase-2/scenarios/launch-pad.jsonl",
+      "sha256": "0f1cf112bd277f88c9842fd35e121b2298e8afd2ae69303c65e6a66955eb0324"
+    },
+    {
+      "file": "docs/proof/phase-2/scenarios/pause.jsonl",
+      "sha256": "ad104850f73aaefc406bdcae37fc09dda5cd37f592a7d3444e3a6206a660a306"
+    },
+    {
+      "file": "docs/proof/phase-2/scenarios/ramp.jsonl",
+      "sha256": "f3898f70eac44216bb752d3d626ebff8490b24d291520a9320cea9f01984a7db"
+    },
+    {
+      "file": "docs/proof/phase-2/scenarios/summary.json",
+      "sha256": "9149da91e09cad5a7886b46a6b14540c44ed82387450e4c6ef6e7f1502c9cc93"
+    },
+    {
+      "file": "docs/proof/phase-2/scenarios/wind.jsonl",
+      "sha256": "de23ca3a20f16c76fd311acdcf2aaf4b0513857fc7f53b40032d858e5ce9731c"
+    },
+    {
+      "file": "docs/proof/phase-2/tests.txt",
+      "sha256": "714b0fe23c374cdcb69ad02a2a8419b9e226c21b6a5087b5029082cf72481368"
+    },
+    {
+      "file": "docs/proof/phase-3/README.md",
+      "sha256": "55c80439822f24b92196043e5ccef25d366427701e2d86e88d0722a433956147"
+    },
+    {
+      "file": "docs/proof/phase-3/benchmark.json",
+      "sha256": "c3512d6305f91643d0468737bef3f89b054467dc26a7019b8272bd1f806f5593"
+    },
+    {
+      "file": "docs/proof/phase-3/build.txt",
+      "sha256": "a8e555fe05024d4721ae275978284b8464e8a0b7e8f8bfedc27845c5863c663b"
+    },
+    {
+      "file": "docs/proof/phase-3/clean-check.json",
+      "sha256": "9228aac8096d96b1cb8123557e87db48c28efeb8dbcaf7a37af5b1bdcfc5c3fe"
+    },
+    {
+      "file": "docs/proof/phase-3/clean-check.txt",
+      "sha256": "aa7e8ddd56f4e1033324fbcc44e47312d798903847ab1e8098ecf1deabb755f9"
+    },
+    {
+      "file": "docs/proof/phase-3/environment.json",
+      "sha256": "0568eba9ccf1407bf689b0673b738dd158bf564942b21304a7dadf135f7387f6"
+    },
+    {
+      "file": "docs/proof/phase-3/http.json",
+      "sha256": "241b627cf3d3dfcbc764ac41da66d135d323cd1c77cb9580bdc32aaab9c9f534"
+    },
+    {
+      "file": "docs/proof/phase-3/legacy-scenarios/charm.jsonl",
+      "sha256": "dd54a5045211ca755a50e72f95a66fcf5ed84c6c6f474ed124a6355a5377b1ca"
+    },
+    {
+      "file": "docs/proof/phase-3/legacy-scenarios/dash.jsonl",
+      "sha256": "4a9d07b22c427b3e042ac8bd45f13791d85f892e988bac01297c27a78ed59c5e"
+    },
+    {
+      "file": "docs/proof/phase-3/legacy-scenarios/drifter-drop.jsonl",
+      "sha256": "c3a02a99ff16245e3575de7fe0d3dd90523e5227243e21e7a9eafc9df80efbdb"
+    },
+    {
+      "file": "docs/proof/phase-3/legacy-scenarios/drifter-steal.jsonl",
+      "sha256": "abba7fad708482835ad9da5ea12d06fe26b725e916feaca3775479a6fc5af9a0"
+    },
+    {
+      "file": "docs/proof/phase-3/legacy-scenarios/fall-respawn.jsonl",
+      "sha256": "8eef6a7f67b4f01af80fddabf515c75e344fee2b53ab0757e4b92612a10def22"
+    },
+    {
+      "file": "docs/proof/phase-3/legacy-scenarios/last-tick-win.jsonl",
+      "sha256": "f24f211bda302821d6a4bf51462d9e1fd1f334712cd3fe5380aabe7583be0002"
+    },
+    {
+      "file": "docs/proof/phase-3/legacy-scenarios/launch-pad.jsonl",
+      "sha256": "427a3828008e99695fd7e56aa00b89861392b6889585294d4aa622aa3fa7ea43"
+    },
+    {
+      "file": "docs/proof/phase-3/legacy-scenarios/pause.jsonl",
+      "sha256": "05df689591125a68c87d8a56c0e7a766c0ff2d0a96cca1a53f1c624552750b81"
+    },
+    {
+      "file": "docs/proof/phase-3/legacy-scenarios/ramp.jsonl",
+      "sha256": "ab8ebd0a3b240b7927b7a2d16ac467966215062cee74cdf6350b72f37b8552b9"
+    },
+    {
+      "file": "docs/proof/phase-3/legacy-scenarios/summary.json",
+      "sha256": "106927491d60942c0434074ea99364e1a2a0607e0bfc8832c88f1b0ef3c2941e"
+    },
+    {
+      "file": "docs/proof/phase-3/legacy-scenarios/wind.jsonl",
+      "sha256": "49e7a5f05bf69cb497194694210c9aa6b60d5801389aeaf450c23737cbd8e111"
+    },
+    {
+      "file": "docs/proof/phase-3/scenarios/capacity-growth.jsonl",
+      "sha256": "f8da77e1c31bf3933179f54a4911b32e7fcb5f3bfeb546e29c7e4fee626f2d0a"
+    },
+    {
+      "file": "docs/proof/phase-3/scenarios/dawn-expiry.jsonl",
+      "sha256": "fdb2b7b3ebc7fa98d83a1c56853f6cdbda7e2e5bb9d9149baca0b723ab333c85"
+    },
+    {
+      "file": "docs/proof/phase-3/scenarios/dawn-survived.jsonl",
+      "sha256": "6981eae9d886fe097606c94d1594fc549bda92fab493a14e6d1754def641ce61"
+    },
+    {
+      "file": "docs/proof/phase-3/scenarios/drain-pulse.jsonl",
+      "sha256": "607a6eba3e55311069a38305337be229ab29cbaf4a4cca9a7dc9b62c6d23888f"
+    },
+    {
+      "file": "docs/proof/phase-3/scenarios/drain-stacked.jsonl",
+      "sha256": "4a64e29bd3629acbe48c5a15a8e485cb9f957763a83a603ba1b3ba0749628030"
+    },
+    {
+      "file": "docs/proof/phase-3/scenarios/fuel-expiry.jsonl",
+      "sha256": "b4fe1bcfda79380c7b073dfff1c88fc67de5b282b5f315c1df0dd92fc898bf7e"
+    },
+    {
+      "file": "docs/proof/phase-3/scenarios/refuel.jsonl",
+      "sha256": "ff2a0ac63182d7bd2949715977442983f4f2a8814f593394791947ee9cf8030c"
+    },
+    {
+      "file": "docs/proof/phase-3/scenarios/relight.jsonl",
+      "sha256": "f6265a665e958c53d9b62fa2144482399587e267ed83a0176b87176201ff9c0c"
+    },
+    {
+      "file": "docs/proof/phase-3/scenarios/summary.json",
+      "sha256": "c6b10192fbb34b03142dab49aa29bb0f6f7e3048627ef910b86e019ebca8a1f7"
+    },
+    {
+      "file": "docs/proof/phase-3/tests.txt",
+      "sha256": "48251deae8b24e0d227f9412c1f7cc5434ce4f2cc1f8d70a2871d241c5baf5af"
+    },
+    {
+      "file": "docs/specs/phase-1.md",
+      "sha256": "64da0821cf06d1cb669aa4f55783153ec68d77c546285d545aff4c4e9e41d85a"
+    },
+    {
+      "file": "docs/specs/phase-2.md",
+      "sha256": "6c3a51b0c176346a2ace23c78db51d8111bca016511cab28de9ac768b191adc5"
+    },
+    {
+      "file": "docs/specs/phase-3.md",
+      "sha256": "ad4a6d7abfb403b0c7b27ad0ae38666bdf24255eab45b1957bc2e7b143d8bf08"
+    },
+    {
+      "file": "game.contract.json",
+      "sha256": "afe0ca2ead98d0ca8daed42bb442c98089d7436feb33a58af67a754c35b67b42"
+    },
+    {
+      "file": "package-lock.json",
+      "sha256": "33f24411864b5938e661ea95f9f90b57bb03115455fbb4e978f1d010c1e8c20c"
+    },
+    {
+      "file": "package.json",
+      "sha256": "0af13e6e0303ace2763ac4fdc70ba69c01921d0de8edde3262a01323918c7c7e"
+    },
+    {
+      "file": "public/app.mjs",
+      "sha256": "de76c5a3e072925af420d18612644cc8059d12fa7404d41b8ba9fa1c15d535e1"
+    },
+    {
+      "file": "public/audio.mjs",
+      "sha256": "36f2e48c8f68c3d601e1b43b9aa0384ba3727e85f68d7fc9aa08aeb9abec9812"
+    },
+    {
+      "file": "public/index.html",
+      "sha256": "0b172b0b45dc86fe3643fbc0edccf95666ed4e7c8e64a2812ca2ea280c54853a"
+    },
+    {
+      "file": "public/presentation.mjs",
+      "sha256": "a818cc63cb546a9be7893a9327db17b26934d96e2181bb710367ebd5221857b1"
+    },
+    {
+      "file": "public/style.css",
+      "sha256": "5e31729ecea0f108cd780d1d4bc73f1460925338149bd20e0b5f2c87b7f631a0"
+    },
+    {
+      "file": "public/view.mjs",
+      "sha256": "72f43f8cd5337d57912a1a10ec37d819808430de91cdd8b6fddbdeb033e3dd57"
+    },
+    {
+      "file": "scripts/benchmark.mjs",
+      "sha256": "e807efa8c6c4ef381372b5bb7d1e8bb411409de452384c735c6142faf057d931"
+    },
+    {
+      "file": "scripts/build.mjs",
+      "sha256": "ed636e2f4e13a83b5c4eb4465055a745a9a1c67576fd5ce522134a7a17f71e25"
+    },
+    {
+      "file": "scripts/clean-check.mjs",
+      "sha256": "5ae5fe63ecc81809e1275c93d8716d85bb8119850a149d7dca1e3f197bf328e0"
+    },
+    {
+      "file": "scripts/replay-scenarios.mjs",
+      "sha256": "19b323bc3723cf5c6a76556d3c665e57ab690a7ac5c0ebb5db3d25518c30738c"
+    },
+    {
+      "file": "scripts/serve.mjs",
+      "sha256": "a39206767427d49ffad245714aa0dbd285dec70246030a83ed1386855b836390"
+    },
+    {
+      "file": "scripts/verify.mjs",
+      "sha256": "a15c48045f55d2116fc3bb0a4418c8d350345fc29ab4a9c54ff08a0657ed02bb"
+    },
+    {
+      "file": "src/core/game.mjs",
+      "sha256": "2acbd92312523c382ceea8a88a080d1b3b74b19eb0901f0e6feb7eaf2c3f8c82"
+    },
+    {
+      "file": "src/core/maps.mjs",
+      "sha256": "2c83d24f126a1400ade637733710cc91aa50c30bc110500a6a5bb0836fb608fa"
+    },
+    {
+      "file": "src/core/random.mjs",
+      "sha256": "be595b12d2f1c4f7ab6989236f1a2fe94ad15493fdf063c9eb42544b527ff282"
+    },
+    {
+      "file": "src/core/validation.mjs",
+      "sha256": "69971ebaaa1dadbd91c90a594dd42170a40b20a313d46a35859155498330da2c"
+    },
+    {
+      "file": "src/headless.mjs",
+      "sha256": "cd46e4f06acc87defe2ad8738c07584f1e3970a5686e3752de1d0c6e23e50515"
+    },
+    {
+      "file": "tests/phase-1.test.mjs",
+      "sha256": "192d729bcbf9320b3dc0b85daf78384d55491c0d244c655c6931f4746b3c1a9c"
+    },
+    {
+      "file": "tests/phase-2.test.mjs",
+      "sha256": "aa04044a5737fbcde5ae75658f4aafdf47301d94486950dc833ac9d49bd7f285"
+    },
+    {
+      "file": "tests/phase-3.test.mjs",
+      "sha256": "8f18dc9cef2f6b196177c7edc70fe4341ea26b7dae23d678be3241baddb8dbaf"
+    },
+    {
+      "file": "tests/presentation.test.mjs",
+      "sha256": "a780db86ce10c2c8c9a5a0819b914fde144c33def06895e6e68e69f55c44334a"
+    },
+    {
+      "file": "tests/scenarios.test.mjs",
+      "sha256": "17ccb36a01111018973b2d0a03eb77bbe9d604c67bf510af0a334688968cb0dc"
+    },
+    {
+      "file": "tests/scenarios/charm.inputs.json",
+      "sha256": "abbb4ba3f4bc571333b43703c6794e4f171089b93f784cba623d8bfdd69e69bf"
+    },
+    {
+      "file": "tests/scenarios/charm.scenario.json",
+      "sha256": "de0fcdec5d0569f90af53c649d0f28d86245316e124332bf45fbd1ccd31ef1d4"
+    },
+    {
+      "file": "tests/scenarios/dash.inputs.json",
+      "sha256": "f9d47d7fae3988e71e337c1ab546f869532ed92f19733bb2eaab3f8c1a1ce955"
+    },
+    {
+      "file": "tests/scenarios/dash.scenario.json",
+      "sha256": "610336967fc6c3d578fffcf461e82c0eab25afeb0db760ffb35fca245e621962"
+    },
+    {
+      "file": "tests/scenarios/drifter-drop.inputs.json",
+      "sha256": "de12675321b606fbc901c2628201ff869065c06b1d97474cf43ca4e80a0cd14f"
+    },
+    {
+      "file": "tests/scenarios/drifter-drop.scenario.json",
+      "sha256": "a06db2351cc1114132547e82c4eb937ba35c6e66358c5d5528370bb4a6a19164"
+    },
+    {
+      "file": "tests/scenarios/drifter-steal.inputs.json",
+      "sha256": "fa0f6730bde4c1dae74d56698f4e7f7b43a973e86ea952e888bb719c8ed473c9"
+    },
+    {
+      "file": "tests/scenarios/drifter-steal.scenario.json",
+      "sha256": "db8e66aae5184656cecc269d229ea4d8221058745d64f88be478fc33d57d0349"
+    },
+    {
+      "file": "tests/scenarios/fall-respawn.inputs.json",
+      "sha256": "fa0f6730bde4c1dae74d56698f4e7f7b43a973e86ea952e888bb719c8ed473c9"
+    },
+    {
+      "file": "tests/scenarios/fall-respawn.scenario.json",
+      "sha256": "e791d73de76050b9e06490c7fe419bd47fb9014f2a78941c7a61bb702065ced1"
+    },
+    {
+      "file": "tests/scenarios/last-tick-win.inputs.json",
+      "sha256": "6211943d6a4b9a0d3c27bc9995a0b4922ed09ca2606a1f4478688895c6ae4c82"
+    },
+    {
+      "file": "tests/scenarios/last-tick-win.scenario.json",
+      "sha256": "7a37f13a4662a551ead7fc951b2480907b85b0128049de52179ad4ee6844200c"
+    },
+    {
+      "file": "tests/scenarios/launch-pad.inputs.json",
+      "sha256": "033977861252c5a37ec8e519aa367a2ee19e9a716bbbb887fddf8d1f2c79eaeb"
+    },
+    {
+      "file": "tests/scenarios/launch-pad.scenario.json",
+      "sha256": "86256fd0303687f7111f2a24924597bf0be09b516a3a468ac1a10aa1da781eb1"
+    },
+    {
+      "file": "tests/scenarios/manifest.json",
+      "sha256": "2d9a1734c1703a8498fcc6f564690ecf4f6d977bf0d75e021ddae973784961da"
+    },
+    {
+      "file": "tests/scenarios/pause.inputs.json",
+      "sha256": "2355e0b49668c6f8c0388e6d4860ecfeb0b4b4a3c2774e526af9db97cf39280c"
+    },
+    {
+      "file": "tests/scenarios/pause.scenario.json",
+      "sha256": "610336967fc6c3d578fffcf461e82c0eab25afeb0db760ffb35fca245e621962"
+    },
+    {
+      "file": "tests/scenarios/phase-3/capacity-growth.inputs.json",
+      "sha256": "6211943d6a4b9a0d3c27bc9995a0b4922ed09ca2606a1f4478688895c6ae4c82"
+    },
+    {
+      "file": "tests/scenarios/phase-3/capacity-growth.scenario.json",
+      "sha256": "66268abae24a9f58e40aa95ebe58a553fdeaec74716909c805b650554d9cb619"
+    },
+    {
+      "file": "tests/scenarios/phase-3/dawn-expiry.inputs.json",
+      "sha256": "fa0f6730bde4c1dae74d56698f4e7f7b43a973e86ea952e888bb719c8ed473c9"
+    },
+    {
+      "file": "tests/scenarios/phase-3/dawn-expiry.scenario.json",
+      "sha256": "21385535251246557f0b967bc4a0d8afc3b42ca62b8e550ac7032dca1b7416cd"
+    },
+    {
+      "file": "tests/scenarios/phase-3/dawn-survived.inputs.json",
+      "sha256": "fa0f6730bde4c1dae74d56698f4e7f7b43a973e86ea952e888bb719c8ed473c9"
+    },
+    {
+      "file": "tests/scenarios/phase-3/dawn-survived.scenario.json",
+      "sha256": "f126f82a2b0d1d19d651b9e29153bd0b0ab3e58519cb51c93d9c1c250a844bda"
+    },
+    {
+      "file": "tests/scenarios/phase-3/drain-pulse.inputs.json",
+      "sha256": "de12675321b606fbc901c2628201ff869065c06b1d97474cf43ca4e80a0cd14f"
+    },
+    {
+      "file": "tests/scenarios/phase-3/drain-pulse.scenario.json",
+      "sha256": "f1daf675850d424eb06a0bee11e698d337872875fe74c7dbb0479ed31b00fe3d"
+    },
+    {
+      "file": "tests/scenarios/phase-3/drain-stacked.inputs.json",
+      "sha256": "fa0f6730bde4c1dae74d56698f4e7f7b43a973e86ea952e888bb719c8ed473c9"
+    },
+    {
+      "file": "tests/scenarios/phase-3/drain-stacked.scenario.json",
+      "sha256": "d1bebe40d5ab7d738661163e60595e10ae0787ef95b26976f65a932edc648a5d"
+    },
+    {
+      "file": "tests/scenarios/phase-3/fuel-expiry.inputs.json",
+      "sha256": "fa0f6730bde4c1dae74d56698f4e7f7b43a973e86ea952e888bb719c8ed473c9"
+    },
+    {
+      "file": "tests/scenarios/phase-3/fuel-expiry.scenario.json",
+      "sha256": "591aeb60cde04ca0413bb8926ab56fd401a1ed268eae1eaf5f6af099fb348ed6"
+    },
+    {
+      "file": "tests/scenarios/phase-3/manifest.json",
+      "sha256": "01b4d07d572da780fcffa52237ee017c8a2122c61e580297b575c61d11a178ca"
+    },
+    {
+      "file": "tests/scenarios/phase-3/refuel.inputs.json",
+      "sha256": "6211943d6a4b9a0d3c27bc9995a0b4922ed09ca2606a1f4478688895c6ae4c82"
+    },
+    {
+      "file": "tests/scenarios/phase-3/refuel.scenario.json",
+      "sha256": "3a29fadac0cdb92013a8e9f8eadfe344212b7653fdf5539f5ca4dd7b61162e13"
+    },
+    {
+      "file": "tests/scenarios/phase-3/relight.inputs.json",
+      "sha256": "6211943d6a4b9a0d3c27bc9995a0b4922ed09ca2606a1f4478688895c6ae4c82"
+    },
+    {
+      "file": "tests/scenarios/phase-3/relight.scenario.json",
+      "sha256": "9289a5ca0abd9ee6c9c5dead9d29361824b397d82840fea81f78a810f44592d6"
+    },
+    {
+      "file": "tests/scenarios/ramp.inputs.json",
+      "sha256": "375aad0184751161092871c62017e1692504d1dff543b8f9478843e9d6855d65"
+    },
+    {
+      "file": "tests/scenarios/ramp.scenario.json",
+      "sha256": "bfe6f51275b7b497e5fad61820a8d6c568dbb33d9f7db1a69edf898868cf6191"
+    },
+    {
+      "file": "tests/scenarios/wind.inputs.json",
+      "sha256": "fa0f6730bde4c1dae74d56698f4e7f7b43a973e86ea952e888bb719c8ed473c9"
+    },
+    {
+      "file": "tests/scenarios/wind.scenario.json",
+      "sha256": "5974373daf419e09c544dc0c7cc918f355e2c3ec5178af970a10c689ab713349"
+    }
+  ],
+  "install": "passed",
+  "build": "passed",
+  "tests": "passed",
+  "http": [
+    {
+      "path": "/",
+      "status": 200
+    },
+    {
+      "path": "/app.mjs",
+      "status": 200
+    },
+    {
+      "path": "/view.mjs",
+      "status": 200
+    },
+    {
+      "path": "/src/core/game.mjs",
+      "status": 200
+    },
+    {
+      "path": "/vendor/three.module.js",
+      "status": 200
+    }
+  ],
+  "visual_browser_check": "not performed"
+}

@@ -40,6 +40,8 @@ function dispose(group) {
 export class View {
   constructor(canvas) {
     this.accessiblePalette = false;
+    this.reducedMotion = false;
+    this.standardScene = false;
     this.renderer = new THREE.WebGLRenderer({
       canvas,
       antialias: true,
@@ -49,6 +51,8 @@ export class View {
     this.renderer.setSize(innerWidth, innerHeight);
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
     this.scene = new THREE.Scene();
+    this.decorations = new THREE.Group();
+    this.scene.add(this.decorations);
     this.scene.background = new THREE.Color(colors.sky);
     this.scene.fog = new THREE.FogExp2(colors.fog, 0.006);
     this.camera = new THREE.PerspectiveCamera(
@@ -71,7 +75,7 @@ export class View {
       0,
     );
     sea.rotation.x = -Math.PI / 2;
-    mesh(
+    this.moon = mesh(
       new THREE.SphereGeometry(5, 20, 12),
       new THREE.MeshBasicMaterial({ color: colors.core }),
       this.scene,
@@ -89,7 +93,7 @@ export class View {
     }
     const geo = new THREE.BufferGeometry();
     geo.setAttribute("position", new THREE.BufferAttribute(stars, 3));
-    this.scene.add(
+    this.decorations.add(
       new THREE.Points(
         geo,
         new THREE.PointsMaterial({ color: 0xc8dcff, size: 0.4 }),
@@ -105,7 +109,7 @@ export class View {
           opacity: 0.16,
           depthWrite: false,
         }),
-        this.scene,
+        this.decorations,
         Math.cos(a) * r,
         -5 + (i % 3),
         Math.sin(a) * r,
@@ -216,7 +220,10 @@ export class View {
     g.add(light);
     return g;
   }
-  load(game) {
+  load(game, { standardScene = false } = {}) {
+    this.standardScene = standardScene;
+    this.decorations.visible = !standardScene;
+    this.moon.visible = !standardScene;
     dispose(this.terrain);
     dispose(this.entities);
     this.terrain = new THREE.Group();
@@ -242,7 +249,7 @@ export class View {
         -0.1,
         island.z,
       );
-      for (let i = 0; i < 18; i++) {
+      for (let i = 0; i < (standardScene ? 0 : 18); i++) {
         const a = i * 2.39996,
           r = island.r - 4 - (i % 3) * 2,
           x = island.x + Math.cos(a) * r,
@@ -529,8 +536,15 @@ export class View {
     this.motes.count = Math.min(2048, game.motes.length);
     game.motes.slice(0, 2048).forEach((m, i) => {
       this.dummy.position.set(
-        m.pos[0] + Math.sin(time * 1.2 + i) * 0.1,
-        m.pos[1] + 0.6 + Math.sin(time * 2 + i) * 0.15,
+        m.pos[0] +
+          (this.standardScene || this.reducedMotion
+            ? 0
+            : Math.sin(time * 1.2 + i) * 0.1),
+        m.pos[1] +
+          0.6 +
+          (this.standardScene || this.reducedMotion
+            ? 0
+            : Math.sin(time * 2 + i) * 0.15),
         m.pos[2],
       );
       this.dummy.rotation.y = time + i;
@@ -538,69 +552,106 @@ export class View {
       this.motes.setMatrixAt(i, this.dummy.matrix);
     });
     this.motes.instanceMatrix.needsUpdate = true;
-    for (const s of game.shades) {
-      let model = this.shades.get(s.id);
-      if (!model) {
-        model = new THREE.Group();
-        this.entities.add(model);
-        const body = mesh(
+    if (!this.shadeBatch) {
+      const make = (geo, mat, count) => {
+        const m = new THREE.InstancedMesh(geo, mat, count);
+        m.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
+        m.frustumCulled = false;
+        this.scene.add(m);
+        return m;
+      };
+      this.shadeBatch = {
+        body: make(
           new THREE.IcosahedronGeometry(0.65, 1),
           material(colors.shade, {
             emissive: colors.rim,
             emissiveIntensity: 0.25,
           }),
-          model,
-        );
-        model.userData.body = body;
-        const outline = new THREE.LineSegments(
-          new THREE.EdgesGeometry(new THREE.IcosahedronGeometry(0.67, 1)),
-          new THREE.LineBasicMaterial({ color: theme.shadeRim }),
-        );
-        model.add(outline);
-        model.userData.outline = outline;
-        model.userData.eyes = [];
-        for (const x of [-0.2, 0.2]) {
-          const eye = mesh(
-            new THREE.SphereGeometry(0.07, 6, 4),
-            new THREE.MeshBasicMaterial({ color: theme.shadeRim }),
-            model,
-            x,
-            0.12,
-            0.55,
-          );
-          model.userData.eyes.push(eye);
-        }
-        for (let i = 0; i < 4; i++)
-          mesh(
-            new THREE.ConeGeometry(0.15, 0.8, 5),
-            material(colors.shade),
-            model,
-            Math.cos((i * Math.PI) / 2) * 0.4,
-            -0.4,
-            Math.sin((i * Math.PI) / 2) * 0.4,
-          ).rotation.z = Math.PI;
-        this.shades.set(s.id, model);
-      }
-      model.position.set(
+          2048,
+        ),
+        rim: make(
+          new THREE.IcosahedronGeometry(0.7, 1),
+          new THREE.MeshBasicMaterial({
+            color: theme.shadeRim,
+            side: THREE.BackSide,
+          }),
+          2048,
+        ),
+        eyes: make(
+          new THREE.SphereGeometry(0.07, 6, 4),
+          new THREE.MeshBasicMaterial({ color: theme.shadeRim }),
+          4096,
+        ),
+        tail: make(
+          new THREE.ConeGeometry(0.15, 0.8, 5),
+          material(colors.shade),
+          8192,
+        ),
+      };
+      this.shadePose = new THREE.Object3D();
+      this.shadePart = new THREE.Object3D();
+      this.shadeMatrix = new THREE.Matrix4();
+    }
+    const batch = this.shadeBatch,
+      count = Math.min(2048, game.shades.length);
+    batch.body.count = batch.rim.count = count;
+    batch.eyes.count = count * 2;
+    batch.tail.count = count * 4;
+    batch.body.material.emissive.set(theme.shadeRim);
+    batch.rim.material.color.set(theme.shadeRim);
+    batch.eyes.material.color.set(theme.shadeRim);
+    for (let i = 0; i < count; i++) {
+      const s = game.shades[i],
+        pose = this.shadePose,
+        part = this.shadePart;
+      pose.position.set(
         s.pos[0],
-        s.pos[1] + Math.sin(time * 3) * 0.1,
+        s.pos[1] +
+          (this.standardScene || this.reducedMotion
+            ? 0
+            : Math.sin(time * 3) * 0.1),
         s.pos[2],
       );
-      model.rotation.y = Math.atan2(
-        game.player.pos[0] - s.pos[0],
-        game.player.pos[2] - s.pos[2],
+      pose.rotation.set(
+        0,
+        Math.atan2(
+          game.player.pos[0] - s.pos[0],
+          game.player.pos[2] - s.pos[2],
+        ),
+        0,
       );
-      model.userData.body.material.color.set(
-        s.state === "stunned" ? colors.stunned : colors.shade,
-      );
-      model.userData.body.material.emissive.set(theme.shadeRim);
-      model.userData.outline.material.color.set(theme.shadeRim);
-      for (const eye of model.userData.eyes)
-        eye.material.color.set(theme.shadeRim);
-      model.scale.setScalar(
+      pose.scale.setScalar(
         s.state === "spawning" ? 0.4 + Math.sin(time * 12) * 0.15 : 1,
       );
+      pose.updateMatrix();
+      batch.body.setMatrixAt(i, pose.matrix);
+      batch.rim.setMatrixAt(i, pose.matrix);
+      batch.body.setColorAt(
+        i,
+        new THREE.Color(s.state === "stunned" ? colors.stunned : 0xffffff),
+      );
+      for (let j = 0; j < 2; j++) {
+        part.position.set(j === 0 ? -0.2 : 0.2, 0.12, 0.55);
+        part.rotation.set(0, 0, 0);
+        part.scale.setScalar(1);
+        part.updateMatrix();
+        this.shadeMatrix.multiplyMatrices(pose.matrix, part.matrix);
+        batch.eyes.setMatrixAt(i * 2 + j, this.shadeMatrix);
+      }
+      for (let j = 0; j < 4; j++) {
+        part.position.set(
+          Math.cos((j * Math.PI) / 2) * 0.4,
+          -0.4,
+          Math.sin((j * Math.PI) / 2) * 0.4,
+        );
+        part.rotation.set(0, 0, Math.PI);
+        part.updateMatrix();
+        this.shadeMatrix.multiplyMatrices(pose.matrix, part.matrix);
+        batch.tail.setMatrixAt(i * 4 + j, this.shadeMatrix);
+      }
     }
+    for (const m of Object.values(batch)) m.instanceMatrix.needsUpdate = true;
+    if (batch.body.instanceColor) batch.body.instanceColor.needsUpdate = true;
     const live = new Set(game.drifters.map((d) => d.id));
     for (const [id, m] of this.drifters)
       if (!live.has(id)) {
@@ -667,15 +718,22 @@ export class View {
     this.pulseAge = 0;
     this.pulse.position.set(pos[0], pos[1] + 0.1, pos[2]);
   }
-  render(game, { time, dt, yaw, menu = false }) {
+  render(game, { time, dt, yaw, menu = false, cameraPosition = null }) {
     this.sync(game, time);
     this.player.position.fromArray(game.player.pos);
     this.player.rotation.y = Math.atan2(...game.player.facing);
     this.player.visible =
       game.player.respawnLeft === 0 &&
-      !(game.player.invuln > 0 && Math.floor(time * 12) % 2);
-    if (menu) {
-      const a = time * 0.025;
+      !(
+        game.player.invuln > 0 &&
+        !this.reducedMotion &&
+        Math.floor(time * 12) % 2
+      );
+    if (cameraPosition) {
+      this.camera.position.fromArray(cameraPosition);
+      this.camera.lookAt(0, 0, 0);
+    } else if (menu) {
+      const a = this.reducedMotion ? 0 : time * 0.025;
       this.camera.position.set(Math.sin(a) * 36, 24, -Math.cos(a) * 36);
       this.camera.lookAt(0, 1, 10);
     } else {
@@ -685,7 +743,10 @@ export class View {
           p[1] + 7,
           p[2] - Math.cos(yaw) * 11,
         );
-      this.camera.position.lerp(target, 1 - Math.exp(-8 * dt));
+      this.camera.position.lerp(
+        target,
+        this.reducedMotion ? 1 : 1 - Math.exp(-8 * dt),
+      );
       this.camera.lookAt(p[0], p[1] + 1, p[2]);
     }
     this.pulseAge += dt;

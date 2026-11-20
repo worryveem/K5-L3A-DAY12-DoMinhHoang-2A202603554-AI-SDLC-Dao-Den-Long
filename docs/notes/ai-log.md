@@ -38,3 +38,21 @@
 - Browser Use vẫn báo host unavailable. Chưa có reviewer độc lập, video hay kiểm chứng hình ảnh.
 - Token Phase3: ước tính thủ công12.000–22.000 token, không phải usage đo được; chi phí chưa xác định.
 - Tiết kiệm: giữ core/CLI/renderer sẵn có, chỉ thêm trạng thái/dữ liệu cần thiết; không engine mới, không tải asset.
+
+## Phase 4
+
+- Nhận Ticket-04/v1.3; dùng cùng renderer/core, thêm scene bench riêng, soak, leaderboard và accessibility. Không đổi luật gameplay Phase3.
+- Đọc tài liệu Electron và switch Chromium chính thức; benchmark là render thật, không lấy throughput headless làm FPS.
+- Native Browser Use không có host; tạo launcher của chính game để đo/chụp/quay. Instancing thay các mesh Bóng Mực riêng lẻ, không thay output gameplay.
+- Test mới kiểm công thức FPS/1%low/P95, fixture200/100, camera orbit,9keybinds, leaderboard HTTP/disk/restart/export và soak cùng PID.18trace hồi quy so từng byte với Phase3.
+- Review ảnh phát hiện menu footer chồng chữ và capture trước khi compositor vẽ panel mới; chỉnh layout, đợi2paint trước ảnh. Quay lần đầu gặp EmptyBitmap do capture đồng thời; dùng hàng đợi capture và frame gần nhất để tránh hai yêu cầu chồng nhau, rồi quay lại thật.
+- Người dùng yêu cầu **không commit/push**, chỉ điền file MD cần cho lab; đã giữ HEAD ở commit Phase3 và không publish Release. Không tạo báo cáo/sơ yếu lý lịch trùng lặp.
+- Người dùng chọn “Tạo video replay+bằng chứng giúp tôi”; video ghi rõ tự động, không nhận là chơi tay.
+- Token Phase4: ước tính thủ công20.000–40.000 token, sai số lớn; không có usage API hay hóa đơn nên không ghi chi phí bịa. Tổng4phase ước tính64.000–115.000 token.
+- Tiết kiệm: dùng lại Three.js/Game và scenario; không thêm framework web; test Node có sẵn; chạy chuẩn30s khi cảnh đã đúng, giữ raw timings để kiểm công thức.
+
+### Chuẩn bị bàn giao sau rà soát
+
+- Người dùng muốn chỉ cần commit/push rồi nộp. Thêm job release sau test/build ba hệ điều hành; kiểm ZIP/bằng chứng trước khi tạo tag và Release, giữ tag cũ.
+- Chưa chạy job GitHub hoặc publish tại máy. Hướng dẫn chính xác ở mục 9 SUBMISSION; không cần thêm file báo cáo cá nhân.
+- Điểm xuất phát Đêm 3 là giả định được PRD cho phép, không tự đặt thêm yêu cầu xin phê duyệt. Replay giữ đúng lựa chọn của người dùng và ghi rõ tự động.

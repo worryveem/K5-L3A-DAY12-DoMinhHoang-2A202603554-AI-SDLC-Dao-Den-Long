@@ -38,7 +38,7 @@ await writeFile(
       memory_gb: Math.round(totalmem() / 1024 ** 3),
       base_commit: git.stdout.trim(),
       working_tree:
-        "Evidence generated before phase commit; tracked with that commit.",
+        "Generated from current working tree. base_commit is the last commit, not a claim that current source/evidence is committed.",
       test_exit_code: run.status,
       build_exit_code: build.status,
       test_output_sha256: createHash("sha256").update(log).digest("hex"),

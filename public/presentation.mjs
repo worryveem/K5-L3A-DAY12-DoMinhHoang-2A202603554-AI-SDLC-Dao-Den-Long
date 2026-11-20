@@ -1,3 +1,4 @@
+import { normalizeBindings } from "./bindings.mjs";
 export function normalizeSettings(value = {}) {
   return {
     volume: Number.isFinite(value?.volume)
@@ -7,6 +8,9 @@ export function normalizeSettings(value = {}) {
       ? Math.min(3, Math.max(0.2, value.sensitivity))
       : 1,
     accessiblePalette: value?.accessiblePalette === true,
+    reducedMotion: value?.reducedMotion === true,
+    largeText: value?.largeText === true,
+    bindings: normalizeBindings(value?.bindings),
   };
 }
 export function paletteFor(accessible) {

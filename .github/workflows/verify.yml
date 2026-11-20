@@ -1,5 +1,7 @@
 name: Verify game
 on: [push, pull_request]
+permissions:
+  contents: read
 jobs:
   test:
     strategy:
@@ -15,3 +17,34 @@ jobs:
       - run: npm ci
       - run: npm test
       - run: npm run build
+  release:
+    needs: test
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    concurrency:
+      group: release-v1.0.0
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: npm run verify:release
+      - run: python3 scripts/package-release.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release-checks
+          path: |
+            docs/proof/phase-4/readiness.json
+            docs/proof/phase-4/package-check.json
+      - name: Publish checked release
+        run: bash scripts/publish-release.sh
+        env:
+          GH_TOKEN: ${{ github.token }}

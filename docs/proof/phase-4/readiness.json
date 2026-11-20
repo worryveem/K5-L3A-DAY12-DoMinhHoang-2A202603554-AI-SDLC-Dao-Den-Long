@@ -1,0 +1,13 @@
+{
+  "recorded_at": "2026-11-20T15:13:50.541Z",
+  "local_checks": "passed",
+  "bench_formula_recomputed": true,
+  "bench_thresholds_passed": true,
+  "soak_threshold_passed": true,
+  "ui_font_check_passed": true,
+  "video_decode_passed": true,
+  "video_duration_s": 64.73,
+  "video_bytes": 554304,
+  "base_commit": "636a187f9a1b8d74c40f625e80602d7fce5a6d0e",
+  "publication": "Not committed, tagged, pushed or released in this Phase4 work, per user instruction. Local checks do not imply GitHub submission complete."
+}

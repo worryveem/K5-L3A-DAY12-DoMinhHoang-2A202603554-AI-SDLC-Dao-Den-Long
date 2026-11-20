@@ -1,0 +1,13 @@
+{
+  "mode": "automated-replay",
+  "duration_requested_s": 65,
+  "game_end": {
+    "type": "end",
+    "ticks": 2092,
+    "state": "playing",
+    "score": 150
+  },
+  "scenario": "public/demo.scenario.json",
+  "inputs": "public/demo.inputs.json",
+  "reports_shown": true
+}

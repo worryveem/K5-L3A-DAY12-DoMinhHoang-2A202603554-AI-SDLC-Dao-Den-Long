@@ -1,0 +1,19 @@
+{
+  "avg_fps": 296.88843848548896,
+  "p1_low_fps": 170.77798861480164,
+  "frame_ms_p95": 4.799999999999272,
+  "frames": 8906,
+  "three_revision": "187",
+  "measured_duration_s": 30,
+  "scene": {
+    "shades": 200,
+    "motes": 100,
+    "lit": 3,
+    "player": [
+      0,
+      0,
+      0
+    ],
+    "creative": false
+  }
+}

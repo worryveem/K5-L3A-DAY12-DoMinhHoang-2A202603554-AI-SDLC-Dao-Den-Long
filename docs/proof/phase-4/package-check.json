@@ -1,0 +1,56 @@
+{
+  "recorded_at": "2026-11-20T15:14:34.329908+00:00",
+  "archive": "artifacts/dao-den-long-v1.0.0-web.zip",
+  "archive_bytes": 2014970,
+  "sha256": "4546f6ac3aa22a9a0793ae9a12a31beb8ddbc8fada53595dede9d6a0397303d9",
+  "packaged_files": 216,
+  "zip_integrity": "passed",
+  "extracted_outside_workspace": true,
+  "dependencies_installed_for_play_check": false,
+  "http": {
+    "/": {
+      "status": 200,
+      "bytes": 6706
+    },
+    "/app.mjs": {
+      "status": 200,
+      "bytes": 26357
+    },
+    "/view.mjs": {
+      "status": 200,
+      "bytes": 22609
+    },
+    "/src/core/game.mjs": {
+      "status": 200,
+      "bytes": 28898
+    },
+    "/vendor/three.module.js": {
+      "status": 200,
+      "bytes": 658900
+    },
+    "/vendor/three.core.js": {
+      "status": 200,
+      "bytes": 1474799
+    },
+    "/vendor/THREE-LICENSE.txt": {
+      "status": 200,
+      "bytes": 1081
+    },
+    "/game.contract.json": {
+      "status": 200,
+      "bytes": 1374
+    },
+    "/api/leaderboard": {
+      "status": 200,
+      "bytes": 14
+    }
+  },
+  "headless_end": {
+    "type": "end",
+    "ticks": 1,
+    "state": "won",
+    "score": 477
+  },
+  "base_commit": "636a187f9a1b8d74c40f625e80602d7fce5a6d0e",
+  "publication": "Archive verification only; this report does not assert GitHub publication."
+}

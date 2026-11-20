@@ -1,7 +1,17 @@
 import { spawn, spawnSync } from "node:child_process";
-import { mkdtemp, mkdir, writeFile, rm } from "node:fs/promises";
+import {
+  mkdtemp,
+  mkdir,
+  writeFile,
+  rm,
+  copyFile,
+  stat,
+  readFile,
+} from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { join, resolve, sep } from "node:path";
+import { join, resolve, sep, dirname } from "node:path";
+import { createHash } from "node:crypto";
+const workingTree = process.argv.includes("--working-tree");
 const phase = process.argv[2] ?? "2",
   npmCli = process.env.npm_execpath;
 if (!npmCli) throw Error("Run through npm: npm run verify:clean -- 2");
@@ -23,6 +33,39 @@ const run = (exe, args) => {
 };
 try {
   run("git", ["clone", "--no-hardlinks", root, "."]);
+  let sourceHashes;
+  if (workingTree) {
+    const listed = spawnSync(
+      "git",
+      ["ls-files", "--cached", "--others", "--exclude-standard", "-z"],
+      { cwd: root, encoding: "utf8" },
+    );
+    if (listed.status !== 0) throw Error("Cannot list working-tree snapshot");
+    sourceHashes = [];
+    for (const file of [
+      ...new Set(listed.stdout.split("\0").filter(Boolean)),
+    ]) {
+      if (file.startsWith("docs/proof/phase-4/")) continue;
+      const source = resolve(root, file),
+        target = resolve(directory, file);
+      if (!target.startsWith(resolve(directory) + sep))
+        throw Error("Snapshot path outside checkout");
+      try {
+        if (!(await stat(source)).isFile()) continue;
+        await mkdir(dirname(target), { recursive: true });
+        await copyFile(source, target);
+        sourceHashes.push({
+          file,
+          sha256: createHash("sha256")
+            .update(await readFile(source))
+            .digest("hex"),
+        });
+      } catch (error) {
+        if (error.code === "ENOENT") await rm(target, { force: true });
+        else throw error;
+      }
+    }
+  }
   run(process.execPath, [npmCli, "ci", "--no-audit", "--no-fund"]);
   run(process.execPath, [npmCli, "run", "build"]);
   run(process.execPath, [npmCli, "test"]);
@@ -70,6 +113,10 @@ try {
       {
         recorded_at: new Date().toISOString(),
         commit,
+        source_mode: workingTree
+          ? "uncommitted working-tree snapshot over clean clone"
+          : "git commit checkout",
+        source_hashes: sourceHashes,
         install: "passed",
         build: "passed",
         tests: "passed",
