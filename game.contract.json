@@ -1,0 +1,29 @@
+{
+  "contract_version": "1.0",
+  "team": "2A202603554-DoMinhHoang",
+  "build_cmd": "npm ci && npm run build",
+  "run_cmd": "npm start",
+  "headless_cmd": "node src/headless.mjs",
+  "tuning": {
+    "player_speed": 6,
+    "carry_capacity": 20,
+    "lantern_cost": 10,
+    "lantern_count_night1": 5,
+    "pickup_radius": 1.6,
+    "interact_radius": 3,
+    "pulse_cost": 3,
+    "pulse_radius": 7,
+    "night1_duration_s": 300,
+    "flames": 3,
+    "invuln_s": 1.5,
+    "hit_drop_ratio": 0.25,
+    "pulse_stun_s": 3,
+    "pulse_push_m": 3,
+    "pulse_cooldown_s": 2,
+    "safe_radius": 5,
+    "shade_speed": 2.4,
+    "shade_hit_radius": 1.1,
+    "fall_enabled": false,
+    "score": {"per_mote": 10, "per_lantern": 100, "per_stun": 15, "per_second_left": 2, "per_flame_left": 50}
+  }
+}

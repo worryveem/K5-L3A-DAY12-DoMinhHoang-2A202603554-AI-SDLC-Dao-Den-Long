@@ -1,0 +1,32 @@
+[
+  {
+    "path": "/",
+    "status": 200,
+    "bytes": 3252
+  },
+  {
+    "path": "/app.mjs",
+    "status": 200,
+    "bytes": 13436
+  },
+  {
+    "path": "/src/core/game.mjs",
+    "status": 200,
+    "bytes": 6917
+  },
+  {
+    "path": "/game.contract.json",
+    "status": 200,
+    "bytes": 780
+  },
+  {
+    "path": "/vendor/three.module.js",
+    "status": 200,
+    "bytes": 658900
+  },
+  {
+    "path": "/vendor/three.core.js",
+    "status": 200,
+    "bytes": 1474799
+  }
+]

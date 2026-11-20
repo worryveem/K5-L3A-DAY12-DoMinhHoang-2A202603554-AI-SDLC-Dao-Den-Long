@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="vi">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#0E1430"><title>Đảo Đèn Lồng · Người giữ ánh sáng</title><link rel="stylesheet" href="/style.css"></head>
+<body>
+  <canvas id="world" aria-label="Đảo Đèn Lồng — game 3D"></canvas>
+  <div id="error" class="panel hidden" role="alert"></div>
+  <main id="menu" class="screen">
+    <div class="eyebrow">MỘT CHUYẾN ĐI GIỮA BIỂN MÂY</div>
+    <h1>Đảo<br><em>Đèn Lồng</em></h1>
+    <p class="subtitle">Đêm có thể dài.<br>Nhưng một đốm sáng cũng đủ để bắt đầu.</p>
+    <button id="start" class="primary">Thắp lại hòn đảo</button>
+    <div class="legend"><span>W A S D <small>di chuyển</small></span><span>SPACE <small>nhảy</small></span><span>E <small>nạp đèn</small></span><span>Q <small>tỏa sáng</small></span></div>
+    <div class="menu-foot">MÂY · NGƯỜI GIỮ ĐÈN NHỎ TUỔI <span>ĐÊM 1 — ĐẢO BẾN</span></div>
+  </main>
+  <div id="hud" class="hidden">
+    <header><div><div class="eyebrow" id="island-label">ĐÊM 1 · ĐẢO BẾN</div><div id="flames" aria-label="Ngọn Lửa"></div></div><div id="clock">05:00</div><div class="progress"><b id="lamps">0 / 5</b><span>ĐÈN ĐÃ THẮP</span><strong id="score">0</strong></div></header>
+    <div id="toast" role="status"></div><div id="objective">Gom đom đóm. Mang ánh sáng trở về.</div>
+    <div id="direction" aria-label="Hướng đèn gần nhất">◇ <span></span></div>
+    <div id="interact" class="hidden"></div>
+    <footer><div class="keys">WASD <span>đi</span> · SPACE <span>nhảy</span><br>Kéo chuột <span>xoay camera</span> · ESC <span>tạm dừng</span></div><div class="inventory"><div id="mote-slots"></div><span id="carried">0 / 20 ĐOM ĐÓM</span></div><div class="abilities"><div id="dash-label">SHIFT <span>Lướt</span></div><div id="pulse-label">Q <span>Tỏa sáng · 3</span></div></div></footer>
+  </div>
+  <div id="pause" class="screen center hidden"><div class="panel"><div class="eyebrow">HÒN ĐẢO ĐANG CHỜ BẠN</div><h2>Một khoảng lặng</h2><button id="resume" class="primary">Tiếp tục</button><button id="restart-pause">Chơi lại Đêm</button><button id="settings-open">Cài đặt</button><button class="back-menu">Về menu</button></div></div>
+  <div id="settings" class="screen center hidden"><div class="panel"><h2>Cài đặt</h2><label>Âm lượng <input id="volume" type="range" min="0" max="1" step="0.01"></label><label>Độ nhạy chuột <input id="sensitivity" type="range" min="0.2" max="3" step="0.1"></label><button id="settings-close" class="primary">Quay lại</button></div></div>
+  <div id="result" class="screen center hidden"><div class="panel"><div class="eyebrow" id="result-eyebrow">NGƯỜI GIỮ ÁNH SÁNG</div><h2 id="result-title"></h2><p id="result-text"></p><div id="result-score"></div><button id="restart" class="primary">Chơi lại Đêm</button><button id="next-night" class="hidden">Đêm kế tiếp</button><button class="back-menu">Về menu</button></div></div>
+  <script type="module" src="/app.mjs"></script>
+</body></html>

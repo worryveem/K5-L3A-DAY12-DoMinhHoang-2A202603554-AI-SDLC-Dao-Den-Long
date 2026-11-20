@@ -1,0 +1,20 @@
+✔ snapshot tick 0; input of tick k produces state/event k+1 (4.8447ms)
+✔ camera transform and normalized diagonal, persistent fields (1.494ms)
+✔ pickup inclusive XZ radius and capacity (0.4985ms)
+✔ deposit partial, nearest lantern, rising edge and retained progress (0.5317ms)
+✔ scenario lit setup grants no score/events (0.4187ms)
+✔ pulse charges, stuns inclusive target, pushes, and rejects held/recharging inputs (0.861ms)
+✔ pulse insufficient carried produces no action (0.4588ms)
+✔ overlapping shades produce one hit during invulnerability; floor drop (0.8297ms)
+✔ lit safe zone blocks shades and damage (2.063ms)
+✔ win/lose and end stop simulation with documented priority (0.9079ms)
+✔ validation rejects invalid JSON shapes, duplicate ticks, nonfinite and excess carry (1.849ms)
+✔ CLI reproducible JSONL including snapshot 0, N steps, final end; invalid files exit 2 (435.235ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 685.099
