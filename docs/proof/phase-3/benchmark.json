@@ -1,0 +1,31 @@
+{
+  "recorded_at": "2026-11-20T09:33:52.246Z",
+  "node": "v24.21.0",
+  "platform": "win32",
+  "arch": "x64",
+  "cpu": "12th Gen Intel(R) Core(TM) i5-12500H",
+  "notes": "CLI includes JSONL file I/O. Scenario prevents early death; spawns remain enabled. Wind off to keep player on the island. This measures headless throughput, not rendered FPS.",
+  "runs": [
+    {
+      "night": 1,
+      "ticks": 21600,
+      "elapsed_s": 1.0930012000000002,
+      "within_30s": true,
+      "bytes": 5733603
+    },
+    {
+      "night": 2,
+      "ticks": 21600,
+      "elapsed_s": 1.0869661000000002,
+      "within_30s": true,
+      "bytes": 6234128
+    },
+    {
+      "night": 3,
+      "ticks": 21600,
+      "elapsed_s": 1.5047964000000003,
+      "within_30s": true,
+      "bytes": 7692991
+    }
+  ]
+}

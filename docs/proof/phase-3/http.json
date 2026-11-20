@@ -1,0 +1,66 @@
+{
+  "recorded_at": "2026-11-20T09:34:47.282Z",
+  "routes": [
+    {
+      "path": "/",
+      "status": 200,
+      "bytes": 4428
+    },
+    {
+      "path": "/style.css",
+      "status": 200,
+      "bytes": 6625
+    },
+    {
+      "path": "/app.mjs",
+      "status": 200,
+      "bytes": 14200
+    },
+    {
+      "path": "/src/core/game.mjs",
+      "status": 200,
+      "bytes": 28862
+    },
+    {
+      "path": "/src/core/random.mjs",
+      "status": 200,
+      "bytes": 276
+    },
+    {
+      "path": "/src/core/maps.mjs",
+      "status": 200,
+      "bytes": 3036
+    },
+    {
+      "path": "/view.mjs",
+      "status": 200,
+      "bytes": 20633
+    },
+    {
+      "path": "/vendor/three.module.js",
+      "status": 200,
+      "bytes": 658900
+    },
+    {
+      "path": "/vendor/three.core.js",
+      "status": 200,
+      "bytes": 1474799
+    },
+    {
+      "path": "/presentation.mjs",
+      "status": 200,
+      "bytes": 823
+    },
+    {
+      "path": "/audio.mjs",
+      "status": 200,
+      "bytes": 1999
+    },
+    {
+      "path": "/game.contract.json",
+      "status": 200,
+      "bytes": 1249
+    }
+  ],
+  "visual_browser_check": "not performed"
+}

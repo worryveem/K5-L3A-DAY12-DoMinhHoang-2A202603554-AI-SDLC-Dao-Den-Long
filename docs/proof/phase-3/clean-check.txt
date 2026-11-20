@@ -1,0 +1,99 @@
+$ git clone --no-hardlinks D:\LAB_AI\K5-L3A-DAY12-DoMinhHoang-2A202603554-AI-SDLC-Dao-Den-Long .
+Cloning into '.'...
+done.
+
+$ node C:\Program Files\nodejs\node_modules\npm\bin\npm-cli.js ci --no-audit --no-fund
+
+added 1 package in 8s
+
+$ node C:\Program Files\nodejs\node_modules\npm\bin\npm-cli.js run build
+
+> dao-den-long@0.3.0 build
+> node scripts/build.mjs
+
+Static game built in dist/
+
+$ node C:\Program Files\nodejs\node_modules\npm\bin\npm-cli.js test
+
+> dao-den-long@0.3.0 test
+> node --test
+
+✔ snapshot tick 0; input of tick k produces state/event k+1 (8.056ms)
+✔ camera transform and normalized diagonal, persistent fields (4.8591ms)
+✔ pickup inclusive XZ radius and capacity (0.7345ms)
+✔ deposit partial, nearest lantern, rising edge and retained progress (1.2009ms)
+✔ scenario lit setup grants no score/events (0.6486ms)
+✔ pulse charges, stuns inclusive target, pushes, and rejects held/recharging inputs (2.2112ms)
+✔ pulse insufficient carried produces no action (0.8157ms)
+✔ overlapping shades produce one hit during invulnerability; floor drop (1.6565ms)
+✔ lit safe zone blocks shades and damage (5.2057ms)
+✔ win/lose and end stop simulation with documented priority (1.6833ms)
+✔ validation rejects invalid JSON shapes, duplicate ticks, nonfinite and excess carry (2.5034ms)
+✔ CLI reproducible JSONL including snapshot 0, N steps, final end; invalid files exit 2 (460.9518ms)
+✔ standardized maps, exact lantern positions, unique random spawn points (10.2096ms)
+✔ pickup vertical limit and new scoring only on deposit (3.365ms)
+✔ equal-distance deposit chooses lexical smallest unlit ID (1.4877ms)
+✔ dash 14m/s for exactly 12 ticks, cooldown from start, requires new press (3.6128ms)
+✔ air dash preserves altitude and no invulnerability (0.7775ms)
+✔ jump has air control, landing and no double jump (1.8164ms)
+✔ pulse exact 3D radius, gradual 4m push in 15 ticks, 120 tick stun (6.0607ms)
+✔ new safe zone evacuates within 30 ticks and prevents hits during evacuation (1.4987ms)
+✔ shade chase hysteresis 12/18 and exact hit height bound (0.8839ms)
+✔ hit creates floor(n/2) recoverable drops with TTL, recoil 2m/60 ticks (3.2271ms)
+✔ fall bypasses invulnerability once; 60-tick wait then respawn and 90 invulnerability (1.6942ms)
+✔ pause freezes all gameplay timers and input edges are retained (0.9836ms)
+✔ mote and shade exact spawn schedule; new spawns cannot interact until next tick (20.5648ms)
+✔ drifter steals before shade hit; safe/invulnerable player can still be robbed (1.6996ms)
+✔ pulse scares chasing drifter; fleeing stolen motes drop and it expires after 120 ticks (2.2413ms)
+✔ drifter spawn at tick1200, limit2, deterministic ID (14.3566ms)
+✔ charm gives 600 ticks, 7.2 speed, free dash cooldown; respawn2700 (20.1889ms)
+✔ jump pads preserve launch velocity despite input and reach destination island (1.8818ms)
+✔ night3 ramp supports ascent, vertical wall blocks ascent and tower blocks (1.7269ms)
+✔ night3 wind warning120 ticks and active300 ticks repeat deterministically (21.1959ms)
+✔ fractional scenario time is preserved in snapshot zero (0.8773ms)
+✔ charm replacement without pos resolves its own ID (0.4467ms)
+✔ night3 jump pad lands on tier two and retains launched movement (0.9722ms)
+✔ dropped mote TTL expires at 480 gameplay ticks and freezes while paused (6.9806ms)
+✔ v1.2 durations and all lit no longer end a night early (7.6767ms)
+✔ scenario prelit defaults100 and ever_lit, no events/score/capacity increase (2.2143ms)
+✔ fuel100 expires at exactly6000 simulation steps and preserves ever_lit (32.3455ms)
+✔ pause freezes fuel, drain timers and night clock (1.7678ms)
+✔ refuel uses ceil, clamps100, consumes only used motes and scores5 each (1.346ms)
+✔ partial refuel consumes available motes and does not falsely fill lamp (0.5229ms)
+✔ full lamp excluded at interaction time; after natural decay it can receive1 (1.3444ms)
+✔ refuel and unlit compete by distance then ID, not by lamp state (0.6228ms)
+✔ first light then expiry and relight retain history, cost5 and distinct score (0.8419ms)
+✔ capacity grows after lighting and next tick pickup uses new limit (1.4094ms)
+✔ scenario successful_lights is honored and capped20, new night resets it (1.7834ms)
+✔ safe threshold is exact30 before decay, below30 permits shade entry (1.0234ms)
+✔ wander targets nearest weak lamp with ID tie and drains from following tick (0.8433ms)
+✔ wander fallback goes to nearest unlit; chase continues toward player (0.8108ms)
+✔ drain stacks with decay and reports every60 active ticks per shade (2.0607ms)
+✔ drain switches chase at6m, stops for out-of-range target or restored safe zone (0.8448ms)
+✔ fuel expiry from drain happens before interactions and releases drain state (0.3956ms)
+✔ refill above30 evacuates shade in30 ticks without damage (1.4945ms)
+✔ pulse awards total15 for drain and5 for other shade, then stun expires to wander (3.6606ms)
+✔ dawn thresholds3/5,4/6,5/7 and no bonus on failure (2.14ms)
+✔ last-tick expiry can lose; same-tick relight can recover the dawn threshold (0.6595ms)
+✔ fatal hit at dawn always loses even with enough lit lamps (0.715ms)
+✔ snapshot fuel rounds1 decimal while thresholds/floor rewards use exact units (0.5703ms)
+✔ v1.2 scenario validation rejects invalid fuel/history/drain targets, CLI data is valid (1.6703ms)
+✔ a drain target beyond2m transitions to wander before it may be acquired again (0.3717ms)
+✔ scenario fuel finer than1/60 is never rounded across the30 safe threshold (0.4568ms)
+✔ accessible palette uses exact cyan rim, white danger and non-color warning marker (2.9068ms)
+✔ saved accessibility roundtrip and legacy settings keep valid defaults (0.6248ms)
+✔ unlit lantern shape is collapsed20% with tears; lit one restores shape and fuel bar (0.4312ms)
+✔ low-fuel blink has 1Hz period, two half-second phases, strict threshold30 (1.4527ms)
+✔ 10 published headless scenarios meet expected outcomes and byte determinism (4046.3215ms)
+✔ 8 Phase3 headless scenarios preserve fuel/drain/dawn outcomes and byte determinism (3005.9139ms)
+ℹ tests 68
+ℹ suites 0
+ℹ pass 68
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 7427.8643
+
+$ git rev-parse HEAD
+2a47f04a68a2b4a983f9601451f0da872d7fa08c

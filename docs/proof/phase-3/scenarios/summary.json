@@ -1,0 +1,50 @@
+[
+  {
+    "scenario": "fuel-expiry",
+    "result": "passed",
+    "ticks": 60,
+    "sha256": "b4fe1bcfda79380c7b073dfff1c88fc67de5b282b5f315c1df0dd92fc898bf7e"
+  },
+  {
+    "scenario": "refuel",
+    "result": "passed",
+    "ticks": 1,
+    "sha256": "ff2a0ac63182d7bd2949715977442983f4f2a8814f593394791947ee9cf8030c"
+  },
+  {
+    "scenario": "relight",
+    "result": "passed",
+    "ticks": 1,
+    "sha256": "f6265a665e958c53d9b62fa2144482399587e267ed83a0176b87176201ff9c0c"
+  },
+  {
+    "scenario": "drain-stacked",
+    "result": "passed",
+    "ticks": 60,
+    "sha256": "4a64e29bd3629acbe48c5a15a8e485cb9f957763a83a603ba1b3ba0749628030"
+  },
+  {
+    "scenario": "drain-pulse",
+    "result": "passed",
+    "ticks": 1,
+    "sha256": "607a6eba3e55311069a38305337be229ab29cbaf4a4cca9a7dc9b62c6d23888f"
+  },
+  {
+    "scenario": "dawn-survived",
+    "result": "passed",
+    "ticks": 1,
+    "sha256": "6981eae9d886fe097606c94d1594fc549bda92fab493a14e6d1754def641ce61"
+  },
+  {
+    "scenario": "dawn-expiry",
+    "result": "passed",
+    "ticks": 1,
+    "sha256": "fdb2b7b3ebc7fa98d83a1c56853f6cdbda7e2e5bb9d9149baca0b723ab333c85"
+  },
+  {
+    "scenario": "capacity-growth",
+    "result": "passed",
+    "ticks": 2,
+    "sha256": "f8da77e1c31bf3933179f54a4911b32e7fcb5f3bfeb546e29c7e4fee626f2d0a"
+  }
+]

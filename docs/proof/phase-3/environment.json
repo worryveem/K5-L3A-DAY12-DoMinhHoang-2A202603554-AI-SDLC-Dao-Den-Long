@@ -1,0 +1,14 @@
+{
+  "recorded_at": "2026-11-20T09:33:41.302Z",
+  "phase": "3",
+  "node": "v24.21.0",
+  "platform": "win32",
+  "arch": "x64",
+  "cpu": "12th Gen Intel(R) Core(TM) i5-12500H",
+  "memory_gb": 16,
+  "base_commit": "2a47f04a68a2b4a983f9601451f0da872d7fa08c",
+  "working_tree": "Evidence generated before phase commit; tracked with that commit.",
+  "test_exit_code": 0,
+  "build_exit_code": 0,
+  "test_output_sha256": "48251deae8b24e0d227f9412c1f7cc5434ce4f2cc1f8d70a2871d241c5baf5af"
+}

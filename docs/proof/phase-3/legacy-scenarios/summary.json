@@ -1,0 +1,62 @@
+[
+  {
+    "scenario": "dash",
+    "result": "passed",
+    "ticks": 12,
+    "sha256": "4a9d07b22c427b3e042ac8bd45f13791d85f892e988bac01297c27a78ed59c5e"
+  },
+  {
+    "scenario": "pause",
+    "result": "passed",
+    "ticks": 40,
+    "sha256": "05df689591125a68c87d8a56c0e7a766c0ff2d0a96cca1a53f1c624552750b81"
+  },
+  {
+    "scenario": "charm",
+    "result": "passed",
+    "ticks": 30,
+    "sha256": "dd54a5045211ca755a50e72f95a66fcf5ed84c6c6f474ed124a6355a5377b1ca"
+  },
+  {
+    "scenario": "drifter-steal",
+    "result": "passed",
+    "ticks": 1,
+    "sha256": "abba7fad708482835ad9da5ea12d06fe26b725e916feaca3775479a6fc5af9a0"
+  },
+  {
+    "scenario": "drifter-drop",
+    "result": "passed",
+    "ticks": 1,
+    "sha256": "c3a02a99ff16245e3575de7fe0d3dd90523e5227243e21e7a9eafc9df80efbdb"
+  },
+  {
+    "scenario": "launch-pad",
+    "result": "passed",
+    "ticks": 90,
+    "sha256": "427a3828008e99695fd7e56aa00b89861392b6889585294d4aa622aa3fa7ea43"
+  },
+  {
+    "scenario": "wind",
+    "result": "passed",
+    "ticks": 1800,
+    "sha256": "49e7a5f05bf69cb497194694210c9aa6b60d5801389aeaf450c23737cbd8e111"
+  },
+  {
+    "scenario": "ramp",
+    "result": "passed",
+    "ticks": 55,
+    "sha256": "ab8ebd0a3b240b7927b7a2d16ac467966215062cee74cdf6350b72f37b8552b9"
+  },
+  {
+    "scenario": "fall-respawn",
+    "result": "passed",
+    "ticks": 61,
+    "sha256": "8eef6a7f67b4f01af80fddabf515c75e344fee2b53ab0757e4b92612a10def22"
+  },
+  {
+    "scenario": "last-tick-win",
+    "result": "passed",
+    "ticks": 1,
+    "sha256": "f24f211bda302821d6a4bf51462d9e1fd1f334712cd3fe5380aabe7583be0002"
+  }
+]
