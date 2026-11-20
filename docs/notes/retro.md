@@ -15,3 +15,10 @@
   kiểm tra trình duyệt/khả năng quay video trước khi dành thời gian renderer.
 - Chỉ số xác thực nằm ở `docs/proof/phase-2/`; token trong ai-log là ước tính,
   không phải usage hệ thống. Không có số chi phí chính xác.
+
+## Bổ sung Phase3
+
+- Giữ lịch sử tag cũ và ghi rõ test nào thay vì cố duy trì luật đã bị thay thế.
+- Fuel hiển thị60.0 có thể thực tế59+59/60: test floor thưởng/ngưỡng dùng integer gốc bắt sai lệch nhìn HUD không thấy.
+- Review FSM bắt patch đặt nhầm nhánh; thêm test thoát stun/drain để tránh chuyển hai lần trong một tick.
+- Mô hình trình bày kiểm tra blink1Hz/palette/shape mà không lẫn vào RNG. Vẫn cần browser xác minh hình ảnh thật.

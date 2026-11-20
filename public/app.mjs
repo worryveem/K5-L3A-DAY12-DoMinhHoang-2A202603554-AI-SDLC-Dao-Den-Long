@@ -1,21 +1,35 @@
-import { Game, DT, distance, idCompare } from "/src/core/game.mjs";
+import { Game, DT, distance } from "/src/core/game.mjs";
 import { makeMap } from "/src/core/maps.mjs";
 import { View } from "./view.mjs";
 import { Audio } from "./audio.mjs";
+import { normalizeSettings, paletteFor } from "./presentation.mjs";
 const $ = (id) => document.getElementById(id);
 try {
   const { tuning: t } = await fetch("/game.contract.json").then((r) =>
     r.json(),
   );
   const view = new View($("world"));
-  let settings = { volume: 0.35, sensitivity: 1 };
+  let settings = normalizeSettings();
   try {
     const value = JSON.parse(localStorage.getItem("lantern-settings") ?? "{}");
-    for (const key of Object.keys(settings))
-      if (Number.isFinite(value[key])) settings[key] = value[key];
+    settings = normalizeSettings(value);
   } catch {}
-  settings.volume = Math.min(1, Math.max(0, settings.volume));
-  settings.sensitivity = Math.min(3, Math.max(0.2, settings.sensitivity));
+  function applyPalette() {
+    view.setAccessibility(settings.accessiblePalette);
+    document.documentElement.style.setProperty(
+      "--danger",
+      paletteFor(settings.accessiblePalette).warning,
+    );
+  }
+  applyPalette();
+  $("accessible-palette").checked = settings.accessiblePalette;
+  $("accessible-palette").onchange = () => {
+    settings.accessiblePalette = $("accessible-palette").checked;
+    applyPalette();
+    try {
+      localStorage.setItem("lantern-settings", JSON.stringify(settings));
+    } catch {}
+  };
   const audio = new Audio(settings);
   for (const key of ["volume", "sensitivity"]) {
     $(key).value = settings[key];
@@ -113,10 +127,10 @@ try {
       `ĐÊM ${night} · ${game.map.name.toLocaleUpperCase("vi-VN")}`;
     $("objective").textContent =
       night === 1
-        ? "Gom đom đóm. Mang ánh sáng trở về."
+        ? "Giữ ít nhất 3 đèn sáng tới bình minh. Nhớ châm dầu."
         : night === 2
-          ? "Cầu tre nối hai bờ. Bục đỏ đưa Mây bay xa."
-          : "Theo dốc lên tầng cao. Lắng nghe tiếng gió.";
+          ? "Giữ ít nhất 4 đèn sáng tới bình minh. Bục đỏ nối hai bờ."
+          : "Giữ ít nhất 5 đèn sáng tới bình minh. Cẩn thận gió mạnh.";
     $("mote-slots").replaceChildren(
       ...Array.from({ length: t.carry_capacity }, () =>
         document.createElement("i"),
@@ -157,6 +171,15 @@ try {
     "ShiftRight",
   ];
   addEventListener("keydown", (e) => {
+    const onControl =
+      e.target instanceof Element &&
+      e.target.closest("input,button,select,textarea");
+    if (
+      onControl &&
+      (mode !== "play" || game.state === "paused") &&
+      !["Escape", "KeyP"].includes(e.code)
+    )
+      return;
     if (
       ["Space", "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(
         e.code,
@@ -212,12 +235,12 @@ try {
     $("result-title").textContent = won
       ? night === 3
         ? "Bình Minh"
-        : "Đảo đã sáng rồi!"
+        : "Bình minh trở lại!"
       : "Đừng để đèn tắt";
     $("result-text").textContent = won
       ? night === 3
         ? "Chuông ngân qua biển mây. Mây đã giữ lời hứa với cả ba hòn đảo."
-        : `Ánh đèn đã trở lại ${game.map.name}. Một hòn đảo khác đang chờ Mây.`
+        : `Mây đã giữ ${game.map.name} sáng tới bình minh. Một hòn đảo khác đang chờ.`
       : "Một chuyến đi khác đang đợi. Gom ánh sáng, tìm vùng an toàn và thử lại.";
     $("result-score").textContent = won
       ? `${total.toLocaleString("vi-VN")} điểm tổng`
@@ -228,16 +251,24 @@ try {
   function hud() {
     const p = game.player,
       seconds = Math.ceil(game.timeTicks / 60);
+    const warning = paletteFor(settings.accessiblePalette).marker;
     $("clock").textContent =
-      `${String(Math.floor(seconds / 60)).padStart(2, "0")}:${String(seconds % 60).padStart(2, "0")}`;
+      `${seconds <= 30 ? warning : ""}${String(Math.floor(seconds / 60)).padStart(2, "0")}:${String(seconds % 60).padStart(2, "0")}`;
     $("clock").classList.toggle("danger", seconds <= 30);
     $("flames").textContent =
       "◆".repeat(p.flames) + "◇".repeat(Math.max(0, t.flames - p.flames));
     const lit = game.lanterns.filter((l) => l.lit).length;
-    $("lamps").textContent = `${lit} / ${game.lanterns.length}`;
+    $("lamps").textContent =
+      `${lit} / ${game.lanterns.length} · cần ${Math.ceil(t.win_ratio * game.lanterns.length)}`;
     $("score").textContent = game.score.toLocaleString("vi-VN");
     $("carried").textContent =
-      `${p.carried} / ${t.carry_capacity} ĐOM ĐÓM${p.charm ? ` · BÙA ${Math.ceil(p.charm / 60)}s` : ""}`;
+      `${p.carried} / ${game.capacity} ĐOM ĐÓM${p.charm ? ` · BÙA ${Math.ceil(p.charm / 60)}s` : ""}`;
+    if ($("mote-slots").children.length !== game.capacity)
+      $("mote-slots").replaceChildren(
+        ...Array.from({ length: game.capacity }, () =>
+          document.createElement("i"),
+        ),
+      );
     [...$("mote-slots").children].forEach((s, i) =>
       s.classList.toggle("full", i < p.carried),
     );
@@ -245,19 +276,21 @@ try {
       `Q <span>${p.pulseCd ? `${(p.pulseCd / 60).toFixed(1)} s` : "Tỏa sáng · 3"}</span>`;
     $("dash-label").innerHTML =
       `SHIFT <span>${p.charm ? "Bùa Gió" : p.dashCd ? `${(p.dashCd / 60).toFixed(1)} s` : "Lướt"}</span>`;
-    const l = game.lanterns
-      .filter((l) => !l.lit)
-      .sort(
-        (a, b) =>
-          distance(p.pos, a.pos) - distance(p.pos, b.pos) || idCompare(a, b),
-      )[0];
+    const near = game.nearestLantern(p.pos, (l) => game.acceptsMotes(l));
     $("interact").classList.toggle(
       "hidden",
-      !l || distance(p.pos, l.pos) > t.interact_radius || p.respawnLeft > 0,
+      !near ||
+        distance(p.pos, near.pos) > t.interact_radius ||
+        p.respawnLeft > 0,
     );
+    if (near)
+      $("interact").textContent = near.lit
+        ? `${game.fuel(near) < 30 ? warning : ""}E — Châm dầu (${game.fuel(near).toFixed(1)}/100)`
+        : `E — Nạp ánh sáng (${near.deposited}/${game.lightingCost(near)})`;
+    const l =
+      game.nearestLantern(p.pos, (l) => !l.lit) ??
+      game.nearestLantern(p.pos, (l) => l.lit && game.fuel(l) < 30);
     if (l) {
-      $("interact").textContent =
-        `E — Nạp ánh sáng (${l.deposited}/${t.lantern_cost})`;
       const projected = view.project(l.pos),
         visible =
           projected.z >= -1 &&
@@ -306,6 +339,10 @@ try {
           audio.event(e.name, e.data.result);
           if (e.name === "pulse") view.pulseAt(game.player.pos);
           if (e.name === "lantern_lit") toast("Một ngọn đèn. Một lời hứa.");
+          if (e.name === "lantern_out")
+            toast(
+              `${paletteFor(settings.accessiblePalette).marker}${e.data.lantern_id} đã cạn dầu — thắp lại cần 5 đom đóm`,
+            );
           if (e.name === "charm_picked")
             toast("Bùa Gió · Chạy nhanh hơn, lướt tự do");
           if (e.name === "drifter_steal") toast("Gió Lạc mang đi ánh sáng!");

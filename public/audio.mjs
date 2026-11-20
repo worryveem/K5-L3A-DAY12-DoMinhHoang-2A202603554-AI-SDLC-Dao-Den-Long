@@ -31,6 +31,8 @@ export class Audio {
     const notes = {
       mote_picked: [880, 1174],
       deposit: [440, 554],
+      refuel: [440, 659],
+      lantern_out: [196, 147],
       lantern_lit: [523, 659, 784],
       pulse: [164, 220],
       player_hit: [100, 80],

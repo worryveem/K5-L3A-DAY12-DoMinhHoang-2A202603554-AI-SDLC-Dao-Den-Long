@@ -51,7 +51,7 @@ test("pickup vertical limit and new scoring only on deposit", () => {
     lanterns: [{ id: "L1", pos: [0, 0, 0] }],
   });
   h.step({ interact: true });
-  assert.equal(h.score, 10);
+  assert.equal(h.score, 5);
   assert.equal(h.lanterns[0].deposited, 1);
 });
 test("equal-distance deposit chooses lexical smallest unlit ID", () => {
@@ -65,7 +65,7 @@ test("equal-distance deposit chooses lexical smallest unlit ID", () => {
   g.step({ interact: true });
   assert.equal(g.lanterns[0].lit, true);
   assert.equal(g.lanterns[1].lit, false);
-  assert.equal(g.score, 200);
+  assert.equal(g.score, 150);
 });
 test("dash 14m/s for exactly 12 ticks, cooldown from start, requires new press", () => {
   const g = make();

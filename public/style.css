@@ -148,7 +148,7 @@ header {
   border-radius: 3px;
 }
 .danger {
-  color: #ff5a5f;
+  color: var(--danger, #ff5a5f);
   animation: blink 1s infinite;
 }
 .progress {
@@ -197,6 +197,24 @@ footer {
   display: flex;
   gap: 0.25rem;
   margin-bottom: 0.5rem;
+}
+#mote-slots {
+  justify-content: center;
+  flex-wrap: wrap;
+  max-width: 20rem;
+}
+.panel .check-setting {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  text-align: left;
+}
+.panel input[type="checkbox"] {
+  display: inline-block;
+  width: 1.2rem;
+  height: 1.2rem;
+  margin: 0;
+  flex-shrink: 0;
 }
 #mote-slots i {
   height: 1rem;

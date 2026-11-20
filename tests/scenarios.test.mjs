@@ -18,3 +18,22 @@ test("10 published headless scenarios meet expected outcomes and byte determinis
     rmSync(dir, { recursive: true, force: true });
   }
 });
+
+test("8 Phase3 headless scenarios preserve fuel/drain/dawn outcomes and byte determinism", () => {
+  const dir = mkdtempSync(join(tmpdir(), "lantern-phase3-"));
+  try {
+    const run = spawnSync(
+      process.execPath,
+      [
+        "scripts/replay-scenarios.mjs",
+        dir,
+        "tests/scenarios/phase-3/manifest.json",
+      ],
+      { encoding: "utf8" },
+    );
+    assert.equal(run.status, 0, run.stdout + run.stderr);
+    assert.equal(run.stdout.split("PASS ").length - 1, 8);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});

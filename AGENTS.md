@@ -11,7 +11,10 @@
 - Scenario setup must not emit events or award points.
 - Do not mark a phase complete or create its tag before its ticket is implemented and checked.
 - Keep previous tests unless a received ticket explicitly replaces their rule; document why.
-- Phase 2: score per_mote is awarded on deposit, never on pickup. See phase-2 spec for superseded rules.
+- Phase 3 supersedes win/score/duration/lantern permanence; see docs/specs/phase-3.md and ADR-003.
+- Fuel uses integral 1/60 units in normal gameplay; preserve finer scenario inputs. Only serialize rounded fuel to one decimal; never use rounded fuel for thresholds or score.
+- Decay/drain/extinguish at step2; no_flames then dawn threshold at tick end. Never end a night early for all_lit.
+- Keep UI/accessibility independent of gameplay RNG and headless snapshots.
 - Preserve fixed tick order, pause clock separation, 3D pulse, 15-tick push and 30-tick safe-zone evacuation.
 - Every new Phase 2 feature needs a headless scenario; do not substitute FPS claims with simulation throughput.
 - Do not fabricate screenshots, videos, token usage, external reviews or release status.

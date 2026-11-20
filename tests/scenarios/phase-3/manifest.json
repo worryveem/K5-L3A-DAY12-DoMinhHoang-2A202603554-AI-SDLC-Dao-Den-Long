@@ -1,0 +1,174 @@
+[
+  {
+    "name": "fuel-expiry",
+    "night": 1,
+    "ticks": 60,
+    "expect": {
+      "snapshot": {
+        "player": {
+          "capacity": 10
+        }
+      },
+      "events": [
+        {
+          "name": "lantern_out",
+          "tick": 60,
+          "data": {
+            "lantern_id": "L1"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "name": "refuel",
+    "night": 1,
+    "ticks": 1,
+    "expect": {
+      "snapshot": {
+        "player": {
+          "carried": 6,
+          "capacity": 10
+        }
+      },
+      "end": {
+        "score": 20
+      },
+      "events": [
+        {
+          "name": "refuel",
+          "data": {
+            "lantern_id": "L1",
+            "amount": 4,
+            "fuel": 100
+          }
+        }
+      ]
+    }
+  },
+  {
+    "name": "relight",
+    "night": 1,
+    "ticks": 1,
+    "expect": {
+      "snapshot": {
+        "player": {
+          "capacity": 12
+        }
+      },
+      "end": {
+        "score": 65,
+        "state": "playing"
+      },
+      "events": [
+        {
+          "name": "lantern_lit",
+          "data": {
+            "lantern_id": "L1",
+            "relight": true
+          }
+        }
+      ]
+    }
+  },
+  {
+    "name": "drain-stacked",
+    "night": 1,
+    "ticks": 60,
+    "expect": {
+      "events": [
+        {
+          "name": "fuel_drain",
+          "tick": 60,
+          "data": {
+            "lantern_id": "L1",
+            "shade_id": "S1",
+            "fuel": 9
+          }
+        }
+      ]
+    }
+  },
+  {
+    "name": "drain-pulse",
+    "night": 1,
+    "ticks": 1,
+    "expect": {
+      "end": {
+        "score": 20
+      },
+      "events": [
+        {
+          "name": "pulse",
+          "data": {
+            "stunned_ids": [
+              "S1",
+              "S2"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "name": "dawn-survived",
+    "night": 1,
+    "ticks": 1,
+    "expect": {
+      "end": {
+        "state": "won",
+        "score": 477
+      },
+      "events": [
+        {
+          "name": "game_over",
+          "data": {
+            "reason": "dawn_survived"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "name": "dawn-expiry",
+    "night": 1,
+    "ticks": 1,
+    "expect": {
+      "end": {
+        "state": "lost",
+        "score": 0
+      },
+      "events": [
+        {
+          "name": "lantern_out",
+          "data": {
+            "lantern_id": "L1"
+          }
+        },
+        {
+          "name": "game_over",
+          "data": {
+            "reason": "dawn"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "name": "capacity-growth",
+    "night": 1,
+    "ticks": 2,
+    "expect": {
+      "snapshot": {
+        "player": {
+          "carried": 12,
+          "capacity": 12
+        },
+        "motes_active": 8
+      },
+      "end": {
+        "score": 150
+      }
+    }
+  }
+]

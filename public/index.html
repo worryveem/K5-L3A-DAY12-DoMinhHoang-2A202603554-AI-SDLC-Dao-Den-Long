@@ -33,9 +33,9 @@
           <div class="eyebrow" id="island-label">ĐÊM 1 · ĐẢO BẾN</div>
           <div id="flames" aria-label="Ngọn Lửa"></div>
         </div>
-        <div id="clock">05:00</div>
+        <div id="clock">04:00</div>
         <div class="progress">
-          <b id="lamps">0 / 5</b><span>ĐÈN ĐÃ THẮP</span
+          <b id="lamps">0 / 5</b><span>ĐÈN ĐANG SÁNG</span
           ><strong id="score">0</strong>
         </div>
       </header>
@@ -52,7 +52,7 @@
         </div>
         <div class="inventory">
           <div id="mote-slots"></div>
-          <span id="carried">0 / 20 ĐOM ĐÓM</span>
+          <span id="carried">0 / 10 ĐOM ĐÓM</span>
         </div>
         <div class="abilities">
           <div id="dash-label">SHIFT <span>Lướt</span></div>
@@ -86,13 +86,13 @@
           <input id="volume" type="range" min="0" max="1" step="0.01" /></label
         ><label
           >Độ nhạy chuột
-          <input
-            id="sensitivity"
-            type="range"
-            min="0.2"
-            max="3"
-            step="0.1" /></label
-        ><button id="settings-close" class="primary">Quay lại</button>
+          <input id="sensitivity" type="range" min="0.2" max="3" step="0.1"
+        /></label>
+        <label class="check-setting"
+          ><input id="accessible-palette" type="checkbox" /> Bảng màu dễ phân
+          biệt</label
+        >
+        <button id="settings-close" class="primary">Quay lại</button>
       </div>
     </div>
     <div id="result" class="screen center hidden">

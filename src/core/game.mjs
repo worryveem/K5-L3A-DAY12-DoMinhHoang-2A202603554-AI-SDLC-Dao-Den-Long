@@ -50,6 +50,7 @@ export class Game {
       vel: [0, 0, 0],
       grounded: false,
       carried: p.carried ?? 0,
+      successfulLights: p.successful_lights ?? 0,
       flames: p.flames ?? tuning.flames,
       invuln: p.invuln_ticks ?? 0,
       dashCd: p.dash_cd_ticks ?? 0,
@@ -73,12 +74,24 @@ export class Game {
       pos: [...pos],
       lit: false,
       deposited: 0,
+      fuelUnits: 0,
+      ever_lit: false,
+      relit_count: 0,
     }));
     for (const patch of scenario.lanterns ?? []) {
       const l = this.lanterns.find((x) => x.id === patch.id);
-      Object.assign(l, structuredClone(patch));
-      l.lit = l.lit || l.deposited >= tuning.lantern_cost;
-      if (l.lit) l.deposited = tuning.lantern_cost;
+      if (patch.pos) l.pos = [...patch.pos];
+      l.deposited = patch.deposited ?? 0;
+      l.ever_lit = patch.ever_lit ?? false;
+      const cost = this.lightingCost(l);
+      l.lit = patch.lit === true || l.deposited >= cost;
+      if (l.lit) {
+        l.ever_lit = true;
+        // Normal gameplay uses integral 1/60 units. Preserve finer scenario values:
+        // rounding here could move 29.999 above the exact safe-zone threshold.
+        l.fuelUnits = (patch.fuel ?? tuning.fuel_max) * 60;
+        l.deposited = patch.deposited ?? tuning.lantern_cost;
+      }
     }
     this.randomMotes = scenario.random_motes !== false;
     this.randomShades = scenario.random_shades !== false;
@@ -150,7 +163,20 @@ export class Game {
       recoilLeft: 0,
       recoilDir: [1, 0],
       evacLeft: 0,
+      targetLanternId: s.target_lantern_id ?? null,
+      drainTicks: 0,
     });
+    const shade = this.shades.at(-1);
+    if (shade.state === "drain" && !shade.targetLanternId) {
+      shade.targetLanternId =
+        this.nearestLantern(
+          shade.pos,
+          (l) =>
+            l.lit &&
+            this.fuel(l) < this.t.low_fuel_threshold &&
+            distance(l.pos, shade.pos) <= 2 + EPS,
+        )?.id ?? null;
+    }
   }
   addDrifter(d) {
     const id = d.id ?? `D${this.nextDrifter++}`,
@@ -165,10 +191,75 @@ export class Game {
       dir: direction(this.player.pos, d.pos),
     });
   }
+  get capacity() {
+    return Math.min(
+      this.t.capacity_max,
+      this.t.carry_capacity + 2 * this.player.successfulLights,
+    );
+  }
+  fuel(l) {
+    return l.fuelUnits / 60;
+  }
+  fuelOut(l) {
+    return Math.round(l.fuelUnits / 6) / 10;
+  }
+  lightingCost(l) {
+    return l.ever_lit ? this.t.relight_cost : this.t.lantern_cost;
+  }
+  hasSafeZone(l) {
+    return l.lit && l.fuelUnits >= this.t.low_fuel_threshold * 60;
+  }
+  acceptsMotes(l) {
+    return !l.lit || l.fuelUnits < this.t.fuel_max * 60;
+  }
+  nearestLantern(pos, predicate) {
+    return this.lanterns
+      .filter(predicate)
+      .sort(
+        (a, b) =>
+          distance(pos, a.pos) - distance(pos, b.pos) || idCompare(a, b),
+      )[0];
+  }
   isSafe(pos) {
     return this.lanterns.some(
-      (l) => l.lit && distance(l.pos, pos) <= this.t.safe_radius + EPS,
+      (l) =>
+        this.hasSafeZone(l) && distance(l.pos, pos) <= this.t.safe_radius + EPS,
     );
+  }
+  advanceFuel() {
+    // Integrate the tick-start drain states, then extinguish before player actions.
+    const drains = this.shades.toSorted(numericIds).filter((s) => {
+      const l = this.lanterns.find((l) => l.id === s.targetLanternId);
+      return (
+        s.state === "drain" &&
+        !s.evacLeft &&
+        l?.lit &&
+        this.fuel(l) < this.t.low_fuel_threshold &&
+        distance(s.pos, l.pos) <= 2 + EPS
+      );
+    });
+    for (const l of this.lanterns)
+      if (l.lit) l.fuelUnits -= this.t.fuel_decay_per_s;
+    const reports = [];
+    for (const s of drains) {
+      const l = this.lanterns.find((l) => l.id === s.targetLanternId);
+      l.fuelUnits -= this.t.drain_per_s;
+      if (++s.drainTicks % 60 === 0) reports.push({ s, l });
+    }
+    for (const s of this.shades) if (!drains.includes(s)) s.drainTicks = 0;
+    for (const l of this.lanterns) l.fuelUnits = Math.max(0, l.fuelUnits);
+    for (const { s, l } of reports)
+      this.event("fuel_drain", {
+        lantern_id: l.id,
+        shade_id: s.id,
+        fuel: this.fuelOut(l),
+      });
+    for (const l of this.lanterns)
+      if (l.lit && l.fuelUnits === 0) {
+        l.lit = false;
+        l.deposited = 0;
+        this.event("lantern_out", { lantern_id: l.id });
+      }
   }
   drop(count, center, ring = true) {
     for (let i = 0; i < count; i++) {
@@ -208,6 +299,7 @@ export class Game {
     for (const c of this.charms)
       if (!c.available && c.respawn > 0 && --c.respawn === 0)
         c.available = true;
+    this.advanceFuel();
     let skipPlayer = p.respawnLeft > 0;
     if (skipPlayer && --p.respawnLeft === 0) {
       p.pos = [...this.spawnPos];
@@ -244,7 +336,7 @@ export class Game {
       this.motes = this.motes.filter((m) => {
         if (
           m.ready <= this.simTick &&
-          p.carried < t.carry_capacity &&
+          p.carried < this.capacity &&
           distance(p.pos, m.pos) <= t.pickup_radius + EPS &&
           Math.abs(p.pos[1] - m.pos[1]) <= 1.5 + EPS
         ) {
@@ -381,22 +473,45 @@ export class Game {
       t = this.t,
       l = this.lanterns
         .filter(
-          (l) => !l.lit && distance(p.pos, l.pos) <= t.interact_radius + EPS,
+          (l) =>
+            this.acceptsMotes(l) &&
+            distance(p.pos, l.pos) <= t.interact_radius + EPS,
         )
         .sort(
           (a, b) =>
             distance(p.pos, a.pos) - distance(p.pos, b.pos) || idCompare(a, b),
         )[0];
     if (!l || !p.carried) return;
-    const amount = Math.min(p.carried, t.lantern_cost - l.deposited);
+    if (l.lit) {
+      const amount = Math.min(
+        p.carried,
+        Math.ceil((t.fuel_max * 60 - l.fuelUnits) / (t.fuel_per_mote * 60)),
+      );
+      if (amount === 0) return;
+      l.fuelUnits = Math.min(
+        t.fuel_max * 60,
+        l.fuelUnits + amount * t.fuel_per_mote * 60,
+      );
+      p.carried -= amount;
+      this.score += amount * t.score.per_mote;
+      this.event("refuel", { lantern_id: l.id, amount, fuel: this.fuelOut(l) });
+      return;
+    }
+    const cost = this.lightingCost(l);
+    const amount = Math.min(p.carried, cost - l.deposited);
     p.carried -= amount;
     l.deposited += amount;
     this.score += amount * t.score.per_mote;
     this.event("deposit", { lantern_id: l.id, amount, deposited: l.deposited });
-    if (l.deposited === t.lantern_cost) {
+    if (l.deposited === cost) {
+      const relight = l.ever_lit;
       l.lit = true;
-      this.score += t.score.per_lantern;
-      this.event("lantern_lit", { lantern_id: l.id });
+      l.fuelUnits = t.fuel_max * 60;
+      l.ever_lit = true;
+      if (relight) l.relit_count++;
+      p.successfulLights++;
+      this.score += relight ? t.score.per_relight : t.score.per_lantern;
+      this.event("lantern_lit", { lantern_id: l.id, relight });
     }
   }
   updateSafeZones() {
@@ -404,7 +519,9 @@ export class Game {
       if (
         !s.evacLeft &&
         this.lanterns.some(
-          (l) => l.lit && distance(s.pos, l.pos) < this.t.safe_radius - EPS,
+          (l) =>
+            this.hasSafeZone(l) &&
+            distance(s.pos, l.pos) < this.t.safe_radius - EPS,
         )
       )
         s.evacLeft = 30;
@@ -420,13 +537,16 @@ export class Game {
       stunned = [];
     for (const s of this.shades)
       if (distance3(center, s.pos) <= t.pulse_radius + EPS) {
+        this.score +=
+          s.state === "drain" ? t.score.per_drain_stun : t.score.per_stun;
         s.state = "stunned";
+        s.targetLanternId = null;
+        s.drainTicks = 0;
         s.stateTicks = 120;
         s.pushLeft = 15;
         s.pushDir = direction(p.pos, s.pos);
         s.recoilLeft = 0;
         stunned.push(s.id);
-        this.score += t.score.per_stun;
       }
     for (const d of this.drifters)
       if (
@@ -454,7 +574,7 @@ export class Game {
     if (blockSafe)
       for (const l of this.lanterns)
         if (
-          l.lit &&
+          this.hasSafeZone(l) &&
           distance(s.pos, l.pos) >= this.t.safe_radius - EPS &&
           distance(next, l.pos) < this.t.safe_radius
         ) {
@@ -477,10 +597,30 @@ export class Game {
     const p = this.player,
       speed = this.night === 3 ? 4.5 : this.t.shade_speed;
     for (const s of this.shades) {
+      let leftDrain = false;
+      if (s.state === "drain") {
+        const target = this.lanterns.find((l) => l.id === s.targetLanternId);
+        if (distance(p.pos, s.pos) <= 6 + EPS && p.respawnLeft === 0) {
+          s.state = "chase";
+          s.targetLanternId = null;
+          s.drainTicks = 0;
+        } else if (
+          !target?.lit ||
+          this.fuel(target) >= this.t.low_fuel_threshold ||
+          distance(s.pos, target.pos) > 2 + EPS
+        ) {
+          s.state = "wander";
+          s.targetLanternId = null;
+          s.drainTicks = 0;
+          leftDrain = true;
+        }
+      }
       if (s.evacLeft) {
         const l = this.lanterns
           .filter(
-            (l) => l.lit && distance(l.pos, s.pos) < this.t.safe_radius - EPS,
+            (l) =>
+              this.hasSafeZone(l) &&
+              distance(l.pos, s.pos) < this.t.safe_radius - EPS,
           )
           .sort((a, b) => distance(a.pos, s.pos) - distance(b.pos, s.pos))[0];
         if (l) {
@@ -488,10 +628,13 @@ export class Game {
             step = (this.t.safe_radius - distance(l.pos, s.pos)) / s.evacLeft;
           s.pos[0] += d[0] * step;
           s.pos[2] += d[1] * step;
+          s.evacLeft--;
+          continue;
         }
-        s.evacLeft--;
-        continue;
+        s.evacLeft = 0;
       }
+      if (leftDrain) continue;
+      if (s.state === "drain") continue;
       if (s.state === "spawning") {
         if (s.stateTicks > 0) continue;
         s.state = "wander";
@@ -507,6 +650,8 @@ export class Game {
         }
         if (s.stateTicks > 0) continue;
         s.state = "wander";
+        s.targetLanternId = null;
+        continue;
       }
       if (s.state === "recoil") {
         if (s.recoilLeft > 0) {
@@ -526,12 +671,32 @@ export class Game {
       if (s.state === "wander" && d <= 12 && p.respawnLeft === 0)
         s.state = "chase";
       if (s.state === "chase") {
+        s.targetLanternId = null;
         const dir = direction(s.pos, p.pos),
           step = Math.min(d, speed * DT);
         this.shadeMove(s, dir[0] * step, dir[1] * step);
       } else {
-        const a = (this.simTick / 180 + Number(s.id.replace(/\D/g, ""))) * 1.3;
-        this.shadeMove(s, Math.cos(a) * DT, Math.sin(a) * DT);
+        const weak = this.nearestLantern(
+          s.pos,
+          (l) => l.lit && this.fuel(l) < this.t.low_fuel_threshold,
+        );
+        const target = weak ?? this.nearestLantern(s.pos, (l) => !l.lit);
+        s.targetLanternId = target?.id ?? null;
+        if (target) {
+          const d = distance(s.pos, target.pos),
+            dir = direction(s.pos, target.pos),
+            step = Math.min(d, speed * DT);
+          if (!weak || d > 2 + EPS)
+            this.shadeMove(s, dir[0] * step, dir[1] * step);
+          if (weak && distance(s.pos, target.pos) <= 2 + EPS) {
+            s.state = "drain";
+            s.drainTicks = 0;
+          }
+        } else {
+          const a =
+            (this.simTick / 180 + Number(s.id.replace(/\D/g, ""))) * 1.3;
+          this.shadeMove(s, Math.cos(a) * DT, Math.sin(a) * DT);
+        }
       }
     }
   }
@@ -667,15 +832,24 @@ export class Game {
     if (p.flames === 0) {
       this.state = "lost";
       reason = "no_flames";
-    } else if (this.lanterns.every((l) => l.lit)) {
-      this.state = "won";
-      reason = "all_lit";
-      this.score +=
-        Math.floor(this.timeTicks / 60) * t.score.per_second_left +
-        p.flames * t.score.per_flame_left;
     } else if (this.timeTicks === 0) {
-      this.state = "lost";
-      reason = "dawn";
+      const lit = this.lanterns.filter((l) => l.lit);
+      if (lit.length >= Math.ceil(t.win_ratio * this.lanterns.length)) {
+        this.state = "won";
+        reason = "dawn_survived";
+        this.score +=
+          lit.reduce(
+            (total, l) =>
+              total +
+              t.score.per_lit_at_dawn +
+              Math.floor(l.fuelUnits / 60) * t.score.per_fuel_at_dawn,
+            0,
+          ) +
+          p.flames * t.score.per_flame_left;
+      } else {
+        this.state = "lost";
+        reason = "dawn";
+      }
     }
     if (reason) this.event("game_over", { result: this.state, reason });
   }
@@ -696,12 +870,21 @@ export class Game {
         grounded: p.grounded,
         flames: p.flames,
         carried: p.carried,
+        capacity: this.capacity,
         invuln: p.invuln > 0,
         dash_cd_s: rounded(p.dashCd / 60),
         pulse_cd_s: rounded(p.pulseCd / 60),
         charm_s: rounded(p.charm / 60),
       },
-      lanterns: this.lanterns.map((l) => ({ ...l, pos: posOut(l.pos) })),
+      lanterns: this.lanterns.map((l) => ({
+        id: l.id,
+        pos: posOut(l.pos),
+        lit: l.lit,
+        deposited: l.deposited,
+        fuel: this.fuelOut(l),
+        ever_lit: l.ever_lit,
+        relit_count: l.relit_count,
+      })),
       shades: this.shades.map((s) => ({
         id: s.id,
         pos: posOut(s.pos),

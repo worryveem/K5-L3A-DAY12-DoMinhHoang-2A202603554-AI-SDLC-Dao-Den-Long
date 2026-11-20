@@ -57,11 +57,16 @@ export function validateScenario(value, tuning, night = 1) {
       "dash_cd_ticks",
       "pulse_cd_ticks",
       "charm_ticks",
+      "successful_lights",
     ]) {
       if (key in value.player && !integer(value.player[key]))
         fail(`invalid player.${key}`);
     }
-    if ((value.player.carried ?? 0) > tuning.carry_capacity)
+    const capacity = Math.min(
+      tuning.capacity_max,
+      tuning.carry_capacity + 2 * (value.player.successful_lights ?? 0),
+    );
+    if ((value.player.carried ?? 0) > capacity)
       fail("player.carried exceeds capacity");
     if ((value.player.flames ?? 0) > tuning.flames)
       fail("player.flames exceeds maximum");
@@ -90,6 +95,13 @@ export function validateScenario(value, tuning, night = 1) {
           fail("unknown lantern id");
         if ("lit" in item && typeof item.lit !== "boolean")
           fail("invalid lantern.lit");
+        if ("ever_lit" in item && typeof item.ever_lit !== "boolean")
+          fail("invalid lantern.ever_lit");
+        if (
+          "fuel" in item &&
+          (!finite(item.fuel) || item.fuel < 0 || item.fuel > tuning.fuel_max)
+        )
+          fail("invalid lantern.fuel");
         if (
           "deposited" in item &&
           (!integer(item.deposited) || item.deposited > tuning.lantern_cost)
@@ -112,11 +124,23 @@ export function validateScenario(value, tuning, night = 1) {
       if (
         key === "shades" &&
         "state" in item &&
-        !["spawning", "wander", "chase", "recoil", "stunned"].includes(
+        !["spawning", "wander", "chase", "recoil", "stunned", "drain"].includes(
           item.state,
         )
       )
         fail("invalid shade.state");
+      if (
+        key === "shades" &&
+        "target_lantern_id" in item &&
+        item.target_lantern_id !== null
+      ) {
+        const count = [0, tuning.lantern_count_night1, 6, 7][night];
+        if (
+          typeof item.target_lantern_id !== "string" ||
+          !new RegExp(`^L[1-${count}]$`).test(item.target_lantern_id)
+        )
+          fail("invalid shade.target_lantern_id");
+      }
       if (
         key === "drifters" &&
         "state" in item &&

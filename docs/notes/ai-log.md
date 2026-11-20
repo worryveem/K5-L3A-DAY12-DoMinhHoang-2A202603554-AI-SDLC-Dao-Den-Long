@@ -24,3 +24,17 @@
   cung cấp usage API hoặc hóa đơn. Không quy đổi thành tiền giả định.
 - Tối ưu token/phạm vi: mô-đun terrain/core dùng chung cho3 đêm, 10 scenario nhỏ,
   WebAudio và hình học thủ tục thay tải asset; không dùng subagent/reviewer ngoài.
+
+## Phase 3
+
+- Nhận Ticket-03/v1.2 từ người dùng; viết spec và ADR-003 trước sửa core.
+- Fuel dùng integer1/60; tách lit/ever_lit; safe zone dẫn xuất; drain FSM và finish tại dawn.
+- Cập nhật kỳ vọng cũ bị thay: score, all_lit, duration; không skip. Giữ bằng chứng/tag cũ.
+- Thêm26 test core,4 test trình bày và8 scenario CLI; tổng68 test với18 scenario chạy hai lần so byte.
+- Review đầu vào phát hiện làm tròn fuel scenario theo1/60 có thể đẩy29.999 qua ngưỡng30; giữ nguyên phần lẻ scenario và thêm test ranh giới đó.
+- Review diff phát hiện patch chuyển wander nằm nhầm nhánh spawning; sửa sang stunned rồi kiểm tra lại FSM bằng test cụ thể.
+- Mỗi transition quan trọng có test đầu/cuối tick; không để drain→wander→drain trong một bước che mất trạng thái thoát.
+- Palette/blink/scale kiểm tra bằng mô hình hiển thị thuần; không coi là screenshot, FPS hoặc nghe âm thanh thật.
+- Browser Use vẫn báo host unavailable. Chưa có reviewer độc lập, video hay kiểm chứng hình ảnh.
+- Token Phase3: ước tính thủ công12.000–22.000 token, không phải usage đo được; chi phí chưa xác định.
+- Tiết kiệm: giữ core/CLI/renderer sẵn có, chỉ thêm trạng thái/dữ liệu cần thiết; không engine mới, không tải asset.

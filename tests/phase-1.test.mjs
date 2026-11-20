@@ -136,7 +136,7 @@ test("win/lose and end stop simulation with documented priority", () => {
   const won = make({ lanterns: all, time_left_s: 1 / 60 });
   won.step();
   assert.equal(won.state, "won");
-  assert.equal(won.events.at(-1).data.reason, "all_lit");
+  assert.equal(won.events.at(-1).data.reason, "dawn_survived");
   const tick = won.tick;
   won.step();
   assert.equal(won.tick, tick);

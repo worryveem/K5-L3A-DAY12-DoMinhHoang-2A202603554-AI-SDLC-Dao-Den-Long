@@ -1,5 +1,6 @@
 import * as THREE from "/vendor/three.module.js";
 import { groundHeight } from "/src/core/maps.mjs";
+import { lanternAppearance, paletteFor } from "./presentation.mjs";
 export { THREE };
 export const colors = {
   sky: 0x0e1430,
@@ -38,6 +39,7 @@ function dispose(group) {
 }
 export class View {
   constructor(canvas) {
+    this.accessiblePalette = false;
     this.renderer = new THREE.WebGLRenderer({
       canvas,
       antialias: true,
@@ -414,7 +416,11 @@ export class View {
       ring.rotation.x = Math.PI / 2;
     }
   }
+  setAccessibility(enabled) {
+    this.accessiblePalette = Boolean(enabled);
+  }
   sync(game, time) {
+    const theme = paletteFor(this.accessiblePalette);
     for (const l of game.lanterns) {
       let item = this.lanterns.get(l.id);
       if (!item) {
@@ -436,7 +442,7 @@ export class View {
           3.2,
           0,
         );
-        mesh(
+        const roof = mesh(
           new THREE.ConeGeometry(0.72, 0.35, 8),
           material(colors.wood),
           group,
@@ -456,14 +462,68 @@ export class View {
           0,
         );
         base.rotation.x = Math.PI / 2;
-        item = { group, core, light, base };
+        const tears = new THREE.Group();
+        core.add(tears);
+        const tearGeometry = new THREE.BufferGeometry();
+        tearGeometry.setAttribute(
+          "position",
+          new THREE.Float32BufferAttribute(
+            [
+              -0.05, 0.38, 0.501, 0.07, 0.15, 0.501, -0.03, -0.02, 0.501, -0.03,
+              -0.02, 0.501, 0.07, 0.15, 0.501, 0.06, -0.15, 0.501, -0.03, -0.02,
+              0.501, 0.06, -0.15, 0.501, -0.08, -0.38, 0.501,
+            ],
+            3,
+          ),
+        );
+        tearGeometry.computeVertexNormals();
+        for (let i = 0; i < 3; i++) {
+          const tear = mesh(
+            tearGeometry.clone(),
+            material(colors.shade, { side: THREE.DoubleSide }),
+            tears,
+          );
+          tear.rotation.y = (i * Math.PI * 2) / 3;
+        }
+        tearGeometry.dispose();
+        const fuelBar = new THREE.Group();
+        fuelBar.position.y = 4.4;
+        group.add(fuelBar);
+        mesh(
+          new THREE.PlaneGeometry(1.7, 0.2),
+          new THREE.MeshBasicMaterial({ color: colors.shade }),
+          fuelBar,
+        );
+        const fuelFill = mesh(
+          new THREE.PlaneGeometry(1.5, 0.12),
+          new THREE.MeshBasicMaterial({ color: colors.gold }),
+          fuelBar,
+          0,
+          0,
+          0.01,
+        );
+        item = { group, core, roof, tears, light, base, fuelBar, fuelFill };
         this.lanterns.set(l.id, item);
       }
       item.group.position.fromArray(l.pos);
+      const look = lanternAppearance(l.lit, game.fuel(l), time);
+      item.core.scale.y = look.scaleY;
+      item.roof.position.y = l.lit ? 3.85 : 3.76;
+      item.tears.visible = look.torn;
+      item.fuelBar.visible = look.showFuel;
+      item.fuelBar.quaternion.copy(this.camera.quaternion);
+      item.fuelFill.scale.x = Math.max(0.001, look.fuelFraction);
+      item.fuelFill.position.x = -(1 - look.fuelFraction) * 0.75;
+      item.fuelFill.material.color.set(look.low ? theme.warning : colors.gold);
+      item.fuelFill.visible = look.blinkOn;
       item.core.material.color.set(l.lit ? colors.lit : colors.off);
       item.core.material.emissive.set(l.lit ? colors.lit : 0);
-      item.core.material.emissiveIntensity = l.lit ? 1 : 0;
-      item.light.intensity = l.lit ? 22 : 0;
+      item.core.material.emissiveIntensity = l.lit
+        ? look.blinkOn
+          ? 1
+          : 0.15
+        : 0;
+      item.light.intensity = l.lit ? (look.blinkOn ? 22 : 3.3) : 0;
       item.base.material.color.set(l.lit ? colors.core : colors.off);
     }
     this.motes.count = Math.min(2048, game.motes.length);
@@ -492,15 +552,24 @@ export class View {
           model,
         );
         model.userData.body = body;
-        for (const x of [-0.2, 0.2])
-          mesh(
+        const outline = new THREE.LineSegments(
+          new THREE.EdgesGeometry(new THREE.IcosahedronGeometry(0.67, 1)),
+          new THREE.LineBasicMaterial({ color: theme.shadeRim }),
+        );
+        model.add(outline);
+        model.userData.outline = outline;
+        model.userData.eyes = [];
+        for (const x of [-0.2, 0.2]) {
+          const eye = mesh(
             new THREE.SphereGeometry(0.07, 6, 4),
-            new THREE.MeshBasicMaterial({ color: 0xbba0ff }),
+            new THREE.MeshBasicMaterial({ color: theme.shadeRim }),
             model,
             x,
             0.12,
             0.55,
           );
+          model.userData.eyes.push(eye);
+        }
         for (let i = 0; i < 4; i++)
           mesh(
             new THREE.ConeGeometry(0.15, 0.8, 5),
@@ -524,6 +593,10 @@ export class View {
       model.userData.body.material.color.set(
         s.state === "stunned" ? colors.stunned : colors.shade,
       );
+      model.userData.body.material.emissive.set(theme.shadeRim);
+      model.userData.outline.material.color.set(theme.shadeRim);
+      for (const eye of model.userData.eyes)
+        eye.material.color.set(theme.shadeRim);
       model.scale.setScalar(
         s.state === "spawning" ? 0.4 + Math.sin(time * 12) * 0.15 : 1,
       );

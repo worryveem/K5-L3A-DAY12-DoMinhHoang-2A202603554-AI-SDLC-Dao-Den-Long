@@ -2,9 +2,9 @@ import { readFile, mkdir, writeFile } from "node:fs/promises";
 import { spawnSync } from "node:child_process";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
-const manifest = JSON.parse(
-  await readFile("tests/scenarios/manifest.json", "utf8"),
-);
+import { dirname } from "node:path";
+const manifestPath = process.argv[3] ?? "tests/scenarios/manifest.json";
+const manifest = JSON.parse(await readFile(manifestPath, "utf8"));
 const outDir = process.argv[2] ?? ".work/scenarios";
 await mkdir(outDir, { recursive: true });
 const subset = (actual, expected) => {
@@ -27,9 +27,9 @@ for (const c of manifest) {
     "--ticks",
     String(c.ticks),
     "--scenario",
-    `tests/scenarios/${c.name}.scenario.json`,
+    `${dirname(manifestPath)}/${c.name}.scenario.json`,
     "--inputs",
-    `tests/scenarios/${c.name}.inputs.json`,
+    `${dirname(manifestPath)}/${c.name}.inputs.json`,
     "--snapshot-every",
     "1",
   ];

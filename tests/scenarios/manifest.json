@@ -27,7 +27,7 @@
     "expect": {
       "snapshot": {
         "sim_tick": 10,
-        "time_left_s": 299.833
+        "time_left_s": 239.833
       },
       "events": [
         {
@@ -178,14 +178,14 @@
     "expect": {
       "end": {
         "state": "won",
-        "score": 350
+        "score": 1046
       },
       "events": [
         {
           "name": "game_over",
           "data": {
             "result": "won",
-            "reason": "all_lit"
+            "reason": "dawn_survived"
           }
         }
       ]
