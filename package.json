@@ -1,10 +1,12 @@
 {
   "name": "dao-den-long",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
   "description": "Đảo Đèn Lồng — deterministic 3D game and headless SDLC lab",
-  "engines": {"node": ">=22"},
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
     "build": "node scripts/build.mjs",
     "start": "node scripts/serve.mjs",
@@ -12,5 +14,7 @@
     "test": "node --test",
     "verify": "node scripts/verify.mjs"
   },
-  "dependencies": {"three": "0.187.0"}
+  "dependencies": {
+    "three": "0.187.0"
+  }
 }

@@ -1,0 +1,20 @@
+{
+  "random_motes": false,
+  "random_shades": false,
+  "random_drifters": false,
+  "wind_enabled": false,
+  "player": {
+    "carried": 9,
+    "invuln_ticks": 90
+  },
+  "drifters": [
+    {
+      "id": "D1",
+      "pos": [
+        0,
+        1,
+        0
+      ]
+    }
+  ]
+}

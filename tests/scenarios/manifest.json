@@ -1,0 +1,194 @@
+[
+  {
+    "name": "dash",
+    "night": 1,
+    "ticks": 12,
+    "expect": {
+      "snapshot": {
+        "player": {
+          "pos": [
+            0,
+            0,
+            2.8
+          ]
+        }
+      },
+      "events": [
+        {
+          "name": "dash"
+        }
+      ]
+    }
+  },
+  {
+    "name": "pause",
+    "night": 1,
+    "ticks": 40,
+    "expect": {
+      "snapshot": {
+        "sim_tick": 10,
+        "time_left_s": 299.833
+      },
+      "events": [
+        {
+          "name": "paused"
+        },
+        {
+          "name": "resumed"
+        }
+      ]
+    }
+  },
+  {
+    "name": "charm",
+    "night": 2,
+    "ticks": 30,
+    "expect": {
+      "snapshot": {
+        "player": {
+          "pos": [
+            38.48,
+            0,
+            0
+          ],
+          "charm_s": 9.517
+        }
+      },
+      "events": [
+        {
+          "name": "charm_picked",
+          "data": {
+            "charm_id": "C1",
+            "charm_ticks": 600
+          }
+        }
+      ]
+    }
+  },
+  {
+    "name": "drifter-steal",
+    "night": 2,
+    "ticks": 1,
+    "expect": {
+      "snapshot": {
+        "player": {
+          "carried": 6,
+          "flames": 3
+        }
+      },
+      "events": [
+        {
+          "name": "drifter_steal",
+          "data": {
+            "amount": 3
+          }
+        }
+      ]
+    }
+  },
+  {
+    "name": "drifter-drop",
+    "night": 2,
+    "ticks": 1,
+    "expect": {
+      "snapshot": {
+        "motes_active": 3
+      },
+      "events": [
+        {
+          "name": "drifter_drop",
+          "data": {
+            "amount": 3
+          }
+        }
+      ]
+    }
+  },
+  {
+    "name": "launch-pad",
+    "night": 2,
+    "ticks": 90,
+    "expect": {
+      "snapshot": {
+        "player": {
+          "grounded": true
+        }
+      }
+    }
+  },
+  {
+    "name": "wind",
+    "night": 3,
+    "ticks": 1800,
+    "expect": {
+      "snapshot": {
+        "wind": {
+          "active": true
+        }
+      }
+    }
+  },
+  {
+    "name": "ramp",
+    "night": 3,
+    "ticks": 55,
+    "expect": {
+      "snapshot": {
+        "player": {
+          "pos": [
+            21.218,
+            2.75,
+            12.25
+          ]
+        }
+      }
+    }
+  },
+  {
+    "name": "fall-respawn",
+    "night": 1,
+    "ticks": 61,
+    "expect": {
+      "snapshot": {
+        "player": {
+          "pos": [
+            0,
+            0,
+            0
+          ],
+          "flames": 2,
+          "invuln": true
+        }
+      },
+      "events": [
+        {
+          "name": "player_hit",
+          "data": {
+            "by": "fall",
+            "lost": 9
+          }
+        }
+      ]
+    }
+  },
+  {
+    "name": "last-tick-win",
+    "night": 1,
+    "ticks": 1,
+    "expect": {
+      "end": {
+        "state": "won",
+        "score": 350
+      },
+      "events": [
+        {
+          "name": "game_over",
+          "data": {
+            "result": "won",
+            "reason": "all_lit"
+          }
+        }
+      ]
+    }
+  }
+]
