@@ -1,0 +1,30 @@
+{
+  "recorded_at": "2026-11-20T09:14:21.434Z",
+  "commit": "85dc680cbe12b86f97b79e786c518bb383382805",
+  "install": "passed",
+  "build": "passed",
+  "tests": "passed",
+  "http": [
+    {
+      "path": "/",
+      "status": 200
+    },
+    {
+      "path": "/app.mjs",
+      "status": 200
+    },
+    {
+      "path": "/view.mjs",
+      "status": 200
+    },
+    {
+      "path": "/src/core/game.mjs",
+      "status": 200
+    },
+    {
+      "path": "/vendor/three.module.js",
+      "status": 200
+    }
+  ],
+  "visual_browser_check": "not performed"
+}

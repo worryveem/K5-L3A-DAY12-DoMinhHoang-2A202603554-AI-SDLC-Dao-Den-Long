@@ -12,7 +12,8 @@
     "start": "node scripts/serve.mjs",
     "headless": "node src/headless.mjs",
     "test": "node --test",
-    "verify": "node scripts/verify.mjs"
+    "verify": "node scripts/verify.mjs",
+    "verify:clean": "node scripts/clean-check.mjs"
   },
   "dependencies": {
     "three": "0.187.0"

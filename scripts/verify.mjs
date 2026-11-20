@@ -13,6 +13,17 @@ const run = spawnSync(process.execPath, ["--test"], { encoding: "utf8" });
 const log = run.stdout + run.stderr;
 await writeFile(`${dir}/tests.txt`, log);
 process.stdout.write(log);
+const build =
+  run.status === 0
+    ? spawnSync(process.execPath, ["scripts/build.mjs"], { encoding: "utf8" })
+    : {
+        status: null,
+        stdout: "Build skipped because tests failed.\n",
+        stderr: "",
+      };
+const buildLog = (build.stdout ?? "") + (build.stderr ?? "");
+await writeFile(`${dir}/build.txt`, buildLog, "utf8");
+process.stdout.write(buildLog);
 const git = spawnSync("git", ["rev-parse", "HEAD"], { encoding: "utf8" });
 await writeFile(
   `${dir}/environment.json`,
@@ -29,10 +40,11 @@ await writeFile(
       working_tree:
         "Evidence generated before phase commit; tracked with that commit.",
       test_exit_code: run.status,
+      build_exit_code: build.status,
       test_output_sha256: createHash("sha256").update(log).digest("hex"),
     },
     null,
     2,
   ) + "\n",
 );
-process.exitCode = run.status ?? 1;
+process.exitCode = run.status === 0 && build.status === 0 ? 0 : 1;

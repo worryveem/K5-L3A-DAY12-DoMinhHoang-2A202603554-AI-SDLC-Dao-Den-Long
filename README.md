@@ -66,6 +66,7 @@ JSONL kết thúc bằng `end`; lỗi input/scenario trả mã2, thông báo ra 
 ```sh
 node scripts/replay-scenarios.mjs
 node scripts/benchmark.mjs
+npm run verify:clean -- 2
 ```
 
 10 scenario CLI đều có kỳ vọng và chạy hai lần so từng byte; mặc định lưu ở`.work/`.

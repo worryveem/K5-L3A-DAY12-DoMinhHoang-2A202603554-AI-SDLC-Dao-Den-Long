@@ -1,0 +1,57 @@
+[
+  {
+    "path": "/",
+    "status": 200,
+    "bytes": 4325
+  },
+  {
+    "path": "/style.css",
+    "status": 200,
+    "bytes": 6302
+  },
+  {
+    "path": "/app.mjs",
+    "status": 200,
+    "bytes": 12727
+  },
+  {
+    "path": "/src/core/game.mjs",
+    "status": 200,
+    "bytes": 22970
+  },
+  {
+    "path": "/src/core/random.mjs",
+    "status": 200,
+    "bytes": 276
+  },
+  {
+    "path": "/src/core/maps.mjs",
+    "status": 200,
+    "bytes": 3036
+  },
+  {
+    "path": "/view.mjs",
+    "status": 200,
+    "bytes": 17797
+  },
+  {
+    "path": "/vendor/three.module.js",
+    "status": 200,
+    "bytes": 658900
+  },
+  {
+    "path": "/vendor/three.core.js",
+    "status": 200,
+    "bytes": 1474799
+  },
+  {
+    "path": "/audio.mjs",
+    "status": 200,
+    "bytes": 1942
+  },
+  {
+    "path": "/game.contract.json",
+    "status": 200,
+    "bytes": 945
+  }
+]

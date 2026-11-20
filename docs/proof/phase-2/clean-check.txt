@@ -1,0 +1,68 @@
+$ git clone --no-hardlinks D:\LAB_AI\K5-L3A-DAY12-DoMinhHoang-2A202603554-AI-SDLC-Dao-Den-Long .
+Cloning into '.'...
+done.
+
+$ node C:\Program Files\nodejs\node_modules\npm\bin\npm-cli.js ci --no-audit --no-fund
+
+added 1 package in 9s
+
+$ node C:\Program Files\nodejs\node_modules\npm\bin\npm-cli.js run build
+
+> dao-den-long@0.2.0 build
+> node scripts/build.mjs
+
+Static game built in dist/
+
+$ node C:\Program Files\nodejs\node_modules\npm\bin\npm-cli.js test
+
+> dao-den-long@0.2.0 test
+> node --test
+
+✔ snapshot tick 0; input of tick k produces state/event k+1 (7.168ms)
+✔ camera transform and normalized diagonal, persistent fields (4.4446ms)
+✔ pickup inclusive XZ radius and capacity (0.5505ms)
+✔ deposit partial, nearest lantern, rising edge and retained progress (0.9658ms)
+✔ scenario lit setup grants no score/events (0.4069ms)
+✔ pulse charges, stuns inclusive target, pushes, and rejects held/recharging inputs (1.5364ms)
+✔ pulse insufficient carried produces no action (0.5612ms)
+✔ overlapping shades produce one hit during invulnerability; floor drop (1.4703ms)
+✔ lit safe zone blocks shades and damage (3.7932ms)
+✔ win/lose and end stop simulation with documented priority (1.4493ms)
+✔ validation rejects invalid JSON shapes, duplicate ticks, nonfinite and excess carry (2.8404ms)
+✔ CLI reproducible JSONL including snapshot 0, N steps, final end; invalid files exit 2 (430.9675ms)
+✔ standardized maps, exact lantern positions, unique random spawn points (6.745ms)
+✔ pickup vertical limit and new scoring only on deposit (4.4049ms)
+✔ equal-distance deposit chooses lexical smallest unlit ID (0.9178ms)
+✔ dash 14m/s for exactly 12 ticks, cooldown from start, requires new press (3.6954ms)
+✔ air dash preserves altitude and no invulnerability (0.8451ms)
+✔ jump has air control, landing and no double jump (2.0293ms)
+✔ pulse exact 3D radius, gradual 4m push in 15 ticks, 120 tick stun (4.2543ms)
+✔ new safe zone evacuates within 30 ticks and prevents hits during evacuation (1.4316ms)
+✔ shade chase hysteresis 12/18 and exact hit height bound (0.8806ms)
+✔ hit creates floor(n/2) recoverable drops with TTL, recoil 2m/60 ticks (2.2903ms)
+✔ fall bypasses invulnerability once; 60-tick wait then respawn and 90 invulnerability (2.039ms)
+✔ pause freezes all gameplay timers and input edges are retained (1.0536ms)
+✔ mote and shade exact spawn schedule; new spawns cannot interact until next tick (15.9444ms)
+✔ drifter steals before shade hit; safe/invulnerable player can still be robbed (1.7291ms)
+✔ pulse scares chasing drifter; fleeing stolen motes drop and it expires after 120 ticks (1.5615ms)
+✔ drifter spawn at tick1200, limit2, deterministic ID (11.418ms)
+✔ charm gives 600 ticks, 7.2 speed, free dash cooldown; respawn2700 (17.7872ms)
+✔ jump pads preserve launch velocity despite input and reach destination island (1.2518ms)
+✔ night3 ramp supports ascent, vertical wall blocks ascent and tower blocks (1.9312ms)
+✔ night3 wind warning120 ticks and active300 ticks repeat deterministically (17.5344ms)
+✔ fractional scenario time is preserved in snapshot zero (0.5554ms)
+✔ charm replacement without pos resolves its own ID (0.4533ms)
+✔ night3 jump pad lands on tier two and retains launched movement (0.8773ms)
+✔ dropped mote TTL expires at 480 gameplay ticks and freezes while paused (6.6146ms)
+✔ 10 published headless scenarios meet expected outcomes and byte determinism (4146.8985ms)
+ℹ tests 37
+ℹ suites 0
+ℹ pass 37
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4425.413
+
+$ git rev-parse HEAD
+85dc680cbe12b86f97b79e786c518bb383382805
